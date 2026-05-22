@@ -124,6 +124,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
 
                 <!-- Profil 2 -->
@@ -146,6 +152,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
 
                 <!-- Profil 3 -->
@@ -168,6 +180,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
 
                 <!-- Profil 4 -->
@@ -190,6 +208,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
 
                 <!-- Profil 5 -->
@@ -212,6 +236,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
 
                 <!-- Profil 5 -->
@@ -234,6 +264,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
 
             </div>
@@ -277,6 +313,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
 
                 <!-- Profil 5 -->
@@ -299,6 +341,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
 
                 <!-- Profil 5 -->
@@ -311,7 +359,7 @@
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
-                        Rsika Ayu Wulandari
+                        Riska Ayu Wulandari
                     </h3>
 
                     <p class="text-blue-600 dark:text-slate-300 text-sm mb-4 transition-colors">
@@ -321,6 +369,12 @@
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
+
+                    <a href="https://tiktok.com/@rae_ccccchc"
+                        target="_blank"
+                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
+                        Tiktok
+                    </a>
                 </div>
             </div>
         </div>

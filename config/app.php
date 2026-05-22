@@ -99,6 +99,9 @@ return [
 
     'key' => env('APP_KEY'),
 
+    'esp_api_key' => env('ESP_API_KEY'),
+
+
     'previous_keys' => [
         ...array_filter(
             explode(',', (string) env('APP_PREVIOUS_KEYS', ''))

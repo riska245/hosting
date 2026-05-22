@@ -52,11 +52,25 @@
                 </div>
                 
                 <div class="relative z-10 flex items-center justify-between text-sm">
-                    <span class="text-slate-600 dark:text-slate-400">Target: <span class="font-medium text-black dark:text-slate-200">38.0°C</span></span>
-                    <span class="flex items-center text-green-600 dark:text-green-400 font-medium">
-                        <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-                        0.05°C
-                    </span>
+                    @php
+                        $tempTarget = 38.0;
+                        $currentTemp = isset($latestSensor) ? (float)$latestSensor->temperature : null;
+                        $tempDiff = $currentTemp !== null ? $currentTemp - $tempTarget : null;
+                    @endphp
+                    <span class="text-slate-600 dark:text-slate-400">Target: <span class="font-medium text-black dark:text-slate-200">{{ number_format($tempTarget, 1) }}°C</span></span>
+                    @if($tempDiff !== null)
+                        @php $absTempDiff = abs($tempDiff); @endphp
+                        <span class="flex items-center {{ $absTempDiff <= 0.5 ? 'text-green-600 dark:text-green-400' : 'text-red-500' }} font-medium">
+                            @if($tempDiff >= 0)
+                                <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                            @else
+                                <svg class="w-4 h-4 mr-1 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                            @endif
+                            {{ number_format($absTempDiff, 2) }}°C
+                        </span>
+                    @else
+                        <span class="text-slate-400">--</span>
+                    @endif
                 </div>
             </div>
 
@@ -77,16 +91,30 @@
                 </div>
                 
                 <div class="relative z-10 flex items-center justify-between text-sm">
-                    <span class="text-slate-600 dark:text-slate-400">Target: <span class="font-medium text-black dark:text-slate-200">60%</span></span>
-                    <span class="flex items-center text-orange-500 dark:text-orange-400 font-medium">
-                        <svg class="w-4 h-4 mr-1 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
-                        1.5%
-                    </span>
+                    @php
+                        $humTarget = 60;
+                        $currentHum = isset($latestSensor) ? (float)$latestSensor->humidity : null;
+                        $humDiff = $currentHum !== null ? $currentHum - $humTarget : null;
+                    @endphp
+                    <span class="text-slate-600 dark:text-slate-400">Target: <span class="font-medium text-black dark:text-slate-200">{{ $humTarget }}%</span></span>
+                    @if($humDiff !== null)
+                        @php $absHumDiff = abs($humDiff); @endphp
+                        <span class="flex items-center {{ $absHumDiff <= 5 ? 'text-green-600 dark:text-green-400' : 'text-red-500' }} font-medium">
+                            @if($humDiff >= 0)
+                                <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                            @else
+                                <svg class="w-4 h-4 mr-1 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
+                            @endif
+                            {{ number_format($absHumDiff, 1) }}%
+                        </span>
+                    @else
+                        <span class="text-slate-400">--</span>
+                    @endif
                 </div>
             </div>
         </div>
 
-        <!-- Grafik Historis (Mockup Visual) -->
+        <!-- Grafik Historis -->
         <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 transition-all duration-300">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="font-semibold text-black dark:text-white transition-colors">Grafik Fluktuasi (24 Jam Terakhir)</h3>
@@ -97,9 +125,7 @@
                 </select>
             </div>
             
-            <!-- Area Grafik Mockup menggunakan Flex & Gradients -->
             <div class="h-64 w-full relative border-b border-l border-slate-200 dark:border-slate-700 pt-4 pr-2 pb-2 pl-4">
-                <!-- Grid Lines -->
                 <div class="absolute inset-0 flex flex-col justify-between pl-4 pt-4 pb-2 border-transparent">
                     <div class="w-full h-px bg-slate-100 dark:bg-slate-800/50"></div>
                     <div class="w-full h-px bg-slate-100 dark:bg-slate-800/50"></div>
@@ -107,7 +133,6 @@
                     <div class="w-full h-px bg-slate-100 dark:bg-slate-800/50"></div>
                 </div>
                 
-                <!-- Y-Axis Labels -->
                 <div class="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[10px] text-slate-400 py-2 -ml-6">
                     <span>40°C</span>
                     <span>38°C</span>
@@ -115,24 +140,18 @@
                     <span>34°C</span>
                 </div>
                 
-                <!-- Chart Line Mockup (SVG) -->
                 <div class="w-full h-full relative z-10">
                     <svg class="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
-                        <!-- Area gradient for Suhu -->
                         <linearGradient id="suhuGradient" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stop-color="#f97316" stop-opacity="0.2"/>
                             <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
                         </linearGradient>
                         <path id="chart-area-suhu" d="M0,50 Q10,48 20,45 T40,50 T60,42 T80,48 T100,45 L100,100 L0,100 Z" fill="url(#suhuGradient)" style="transition: opacity 0.3s;" />
-                        <!-- Line for Suhu -->
                         <path id="chart-line-suhu" d="M0,50 Q10,48 20,45 T40,50 T60,42 T80,48 T100,45" fill="none" stroke="#f97316" stroke-width="2" vector-effect="non-scaling-stroke" style="transition: opacity 0.3s;" />
-                        
-                        <!-- Line for Kelembaban (Blue) -->
                         <path id="chart-line-kelembaban" d="M0,70 Q15,75 30,65 T60,68 T85,60 T100,65" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4,4" vector-effect="non-scaling-stroke" style="transition: opacity 0.3s;" />
                     </svg>
                 </div>
                 
-                <!-- X-Axis Labels -->
                 <div class="absolute -bottom-6 left-4 right-0 flex justify-between text-[10px] text-slate-400">
                     <span>00:00</span>
                     <span>06:00</span>
@@ -156,10 +175,10 @@
 
     </div>
         
-    <!-- Kolom Kanan: Info & Log Sistem (Lebar 1/3 di Desktop) -->
+    <!-- Kolom Kanan: Info & Log Sistem -->
     <div class="flex flex-col gap-6 md:gap-8">
         
-        <!-- Info Pemutaran Telur (Egg Turning Status) -->
+        <!-- Info Pemutaran Telur -->
         <div class="bg-gradient-to-br from-white via-amber-50/40 to-orange-50/60 dark:from-slate-900 dark:via-slate-900 dark:to-amber-950/30 backdrop-blur-md border border-amber-200/70 dark:border-amber-900/40 rounded-2xl p-5 sm:p-6 relative overflow-hidden group hover:border-amber-300 dark:hover:border-amber-600/50 transition-all shadow-sm">
             <div class="absolute -right-6 -top-6 w-24 h-24 bg-amber-200/60 dark:bg-amber-500/10 rounded-full blur-2xl"></div>
             
@@ -170,8 +189,12 @@
                         <p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Otomatis (Tiap 4 Jam)</p>
                     </div>
 
+                    @php
+                        $turningStatus = isset($latestSensor) ? strtolower($latestSensor->turning_status) : 'menunggu';
+                        $isRotating = in_array($turningStatus, ['berputar', 'rotating'], true);
+                    @endphp
                     <div class="p-2 bg-amber-100 dark:bg-amber-500/15 rounded-lg ring-1 ring-amber-200/70 dark:ring-amber-400/20">
-                        <svg class="w-6 h-6 text-amber-600 dark:text-amber-300 animate-spin" style="animation-duration: 8s;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-6 h-6 text-amber-600 dark:text-amber-300 {{ $isRotating ? 'animate-spin' : '' }}" style="animation-duration: 8s;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                     </div>
@@ -182,31 +205,55 @@
                     <div class="flex items-center justify-between p-3 bg-white/75 dark:bg-slate-800/60 rounded-xl border border-slate-200/80 dark:border-slate-700/60">
                         <div>
                             <p class="text-xs text-slate-500 dark:text-slate-400">Pemutaran Terakhir</p>
-                            <p class="font-medium text-slate-950 dark:text-white mt-0.5">Hari ini, 10:00 WIB</p>
+                            <p class="font-medium text-slate-950 dark:text-white mt-0.5">
+                                {{ isset($latestSensor) && $latestSensor->turned_at ? $latestSensor->turned_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') . ' WIB' : 'Belum ada data' }}
+                            </p>
                         </div>
 
-                        <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-200/70 dark:ring-emerald-400/20">
-                            <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            Selesai
+                        @php
+                            $statusLabel = 'Menunggu';
+                            $badgeClass = 'bg-amber-100 dark:bg-amber-500/15 text-amber-700 dark:text-amber-300 ring-amber-200/70 dark:ring-amber-400/20';
+                            
+                            if ($isRotating) {
+                                $statusLabel = 'Berputar';
+                                $badgeClass = 'bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 ring-blue-200/70 dark:ring-blue-400/20';
+                            } elseif (in_array($turningStatus, ['selesai', 'completed', 'done', 'turned'], true)) {
+                                $statusLabel = 'Selesai';
+                                $badgeClass = 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 ring-emerald-200/70 dark:ring-emerald-400/20';
+                            }
+                        @endphp
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium {{ $badgeClass }} ring-1">
+                            <span class="w-1.5 h-1.5 rounded-full {{ $turningStatus === 'berputar' || $turningStatus === 'rotating' ? 'bg-blue-500 animate-ping' : ($turningStatus === 'selesai' || $turningStatus === 'completed' || $turningStatus === 'done' || $turningStatus === 'turned' ? 'bg-emerald-500' : 'bg-amber-500') }}"></span>
+                            {{ $statusLabel }}
                         </span>
                     </div>
                     
                     <!-- Selanjutnya -->
+                    @php
+                        $nextTurn = isset($latestSensor) ? $latestSensor->next_turn_at : null;
+                        $diffInMinutes = $nextTurn ? now()->diffInMinutes($nextTurn, false) : 0;
+                        if ($diffInMinutes > 0) {
+                            $hours = floor($diffInMinutes / 60);
+                            $mins = $diffInMinutes % 60;
+                            $dueLabel = $hours > 0 ? "± {$hours} Jam {$mins} Menit lagi" : "± {$mins} Menit lagi";
+                            $progressPct = max(0, min(100, 100 - ($diffInMinutes / 240) * 100));
+                        } else {
+                            $dueLabel = $nextTurn ? 'Jadwal pemutaran tiba' : 'Belum dijadwalkan';
+                            $progressPct = 100;
+                        }
+                    @endphp
                     <div class="flex flex-col p-3 bg-amber-100/75 dark:bg-amber-950/35 rounded-xl border border-amber-200 dark:border-amber-800/50">
                         <div class="flex justify-between items-center mb-2">
                             <p class="text-xs font-medium text-amber-800 dark:text-amber-200">Pemutaran Selanjutnya</p>
-                            <span class="text-[10px] font-medium text-orange-600 dark:text-orange-300">± 1 Jam lagi</span>
+                            <span class="text-[10px] font-medium text-orange-600 dark:text-orange-300">{{ $dueLabel }}</span>
                         </div>
 
                         <p class="text-xl font-bold text-amber-950 dark:text-amber-50">
-                            14:00 <span class="text-sm font-normal text-amber-700 dark:text-amber-300">WIB</span>
+                            {{ $nextTurn ? $nextTurn->setTimezone('Asia/Jakarta')->format('H:i') : '--:--' }} <span class="text-sm font-normal text-amber-700 dark:text-amber-300">WIB</span>
                         </p>
                         
-                        <!-- Progress bar mock -->
                         <div class="mt-3 w-full bg-amber-200 dark:bg-amber-900/60 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 dark:from-amber-300 dark:to-orange-400 h-1.5 rounded-full relative" style="width: 75%">
+                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 dark:from-amber-300 dark:to-orange-400 h-1.5 rounded-full relative" style="width: {{ $progressPct }}%">
                                 <div class="absolute inset-0 bg-white/25 animate-pulse"></div>
                             </div>
                         </div>
@@ -214,7 +261,6 @@
                 </div>
             </div>
         </div>
-
 
         <!-- Log Sistem Terbaru -->
         <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 flex-grow transition-all duration-300">
@@ -224,58 +270,96 @@
             </div>
             
             <div class="space-y-4">
-                <!-- Log Item 1 -->
-                <div class="flex gap-3">
-                    <div class="w-8 h-8 rounded-full bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                @forelse ($sensorHistory->take(4) as $log)
+                    @php
+                        $logTime = $log->created_at->setTimezone('Asia/Jakarta');
+                        $logTimeFormatted = $logTime->isToday() 
+                            ? 'Hari ini, ' . $logTime->format('H:i') . ' WIB' 
+                            : ($logTime->isYesterday() ? 'Kemarin, ' . $logTime->format('H:i') . ' WIB' : $logTime->format('d M Y, H:i') . ' WIB');
+                        
+                        $logIcon = 'info';
+                        $logBg = 'bg-blue-50 dark:bg-blue-500/10';
+                        $logColor = 'text-blue-600 dark:text-blue-400';
+                        
+                        $temp = (float)$log->temperature;
+                        $hum = (float)$log->humidity;
+                        $turning = strtolower($log->turning_status);
+                        $lamp = strtolower($log->lamp_status);
+
+                        if ($temp > 38.5) {
+                            $logIcon = 'warning';
+                            $logBg = 'bg-orange-50 dark:bg-orange-500/10';
+                            $logColor = 'text-orange-600 dark:text-orange-400';
+                            $logMessage = "Peringatan: Suhu terdeteksi terlalu tinggi ({$temp}°C)";
+                        } elseif ($temp < 37.0) {
+                            $logIcon = 'warning';
+                            $logBg = 'bg-red-50 dark:bg-red-500/10';
+                            $logColor = 'text-red-600 dark:text-red-400';
+                            $logMessage = "Peringatan: Suhu terdeteksi terlalu rendah ({$temp}°C)";
+                        } elseif ($turning === 'berputar' || $turning === 'rotating') {
+                            $logIcon = 'spin';
+                            $logBg = 'bg-amber-50 dark:bg-amber-500/10';
+                            $logColor = 'text-amber-600 dark:text-amber-400';
+                            $logMessage = "Rak telur sedang diputar otomatis";
+                        } elseif ($turning === 'selesai' || $turning === 'completed' || $turning === 'done' || $turning === 'turned') {
+                            $logIcon = 'check';
+                            $logBg = 'bg-green-50 dark:bg-green-500/10';
+                            $logColor = 'text-green-600 dark:text-green-400';
+                            $logMessage = "Rak telur berhasil diputar";
+                        } elseif ($lamp === 'menyala' || $lamp === 'on') {
+                            $logIcon = 'lamp';
+                            $logBg = 'bg-orange-50 dark:bg-orange-500/10';
+                            $logColor = 'text-orange-600 dark:text-orange-400';
+                            $logMessage = "Pemanas (Lampu) diaktifkan otomatis";
+                        } elseif ($lamp === 'mati' || $lamp === 'off') {
+                            $logIcon = 'lamp-off';
+                            $logBg = 'bg-slate-50 dark:bg-slate-500/10';
+                            $logColor = 'text-slate-600 dark:text-slate-400';
+                            $logMessage = "Pemanas (Lampu) dinonaktifkan otomatis";
+                        } elseif ($hum > 65.0) {
+                            $logIcon = 'warning';
+                            $logBg = 'bg-blue-50 dark:bg-blue-500/10';
+                            $logColor = 'text-blue-600 dark:text-blue-400';
+                            $logMessage = "Peringatan: Kelembapan terdeteksi terlalu tinggi ({$hum}%)";
+                        } elseif ($hum < 50.0) {
+                            $logIcon = 'warning';
+                            $logBg = 'bg-blue-50 dark:bg-blue-500/10';
+                            $logColor = 'text-blue-600 dark:text-blue-400';
+                            $logMessage = "Peringatan: Kelembapan terdeteksi terlalu rendah ({$hum}%)";
+                        } else {
+                            $logMessage = "Kondisi sistem stabil dan optimal.";
+                        }
+                    @endphp
+
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full {{ $logBg }} flex items-center justify-center shrink-0 mt-0.5">
+                            @if($logIcon === 'warning')
+                                <svg class="w-4 h-4 {{ $logColor }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                            @elseif($logIcon === 'spin')
+                                <svg class="w-4 h-4 {{ $logColor }} animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                            @elseif($logIcon === 'check')
+                                <svg class="w-4 h-4 {{ $logColor }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                            @elseif($logIcon === 'lamp' || $logIcon === 'lamp-off')
+                                <svg class="w-4 h-4 {{ $logColor }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                            @else
+                                <svg class="w-4 h-4 {{ $logColor }}" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            @endif
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-black dark:text-slate-200">{{ $logMessage }}</p>
+                            <p class="text-xs text-slate-500 mt-0.5">{{ $logTimeFormatted }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-sm font-medium text-black dark:text-slate-200">Rak telur berhasil diputar</p>
-                        <p class="text-xs text-slate-500 mt-0.5">Hari ini, 11:00 WIB</p>
-                    </div>
-                </div>
-                
-                <!-- Log Item 2 -->
-                <div class="flex gap-3">
-                    <div class="w-8 h-8 rounded-full bg-yellow-50 dark:bg-yellow-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <svg class="w-4 h-4 text-yellow-600 dark:text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-black dark:text-slate-200">Pintu inkubator terbuka</p>
-                        <p class="text-xs text-slate-500 mt-0.5">Hari ini, 09:42 WIB</p>
-                    </div>
-                </div>
-                
-                <!-- Log Item 3 -->
-                <div class="flex gap-3">
-                    <div class="w-8 h-8 rounded-full bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <svg class="w-4 h-4 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-black dark:text-slate-200">Pemanas diaktifkan otomatis</p>
-                        <p class="text-xs text-slate-500 mt-0.5">Hari ini, 06:15 WIB</p>
-                    </div>
-                </div>
-                
-                <!-- Log Item 4 -->
-                <div class="flex gap-3 opacity-60">
-                    <div class="w-8 h-8 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                        <svg class="w-4 h-4 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-black dark:text-slate-200">Kalibrasi sensor berhasil</p>
-                        <p class="text-xs text-slate-500 mt-0.5">Kemarin, 14:00 WIB</p>
-                    </div>
-                </div>
+                @empty
+                    <p class="text-sm text-slate-500 dark:text-slate-400 text-center py-4">Belum ada riwayat aktivitas sistem.</p>
+                @endforelse
             </div>
-            
         </div>
     </div>
         
-    </div>
 </div>
 
-<!-- Tabel Data Sensor (Collapsible) -->
+<!-- Tabel Data Sensor -->
 <div id="data-table-panel" class="hidden mt-6 sm:mt-8 px-1 sm:px-2 md:px-0 animate-fade-in-up">
     <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 transition-all duration-300">
         
@@ -292,7 +376,6 @@
             </div>
         </div>
 
-        <!-- Table Container -->
         <div class="overflow-x-auto -mx-5 sm:-mx-6 px-5 sm:px-6">
             <table class="w-full min-w-[600px]">
                 <thead>
@@ -305,221 +388,62 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
-                    
-                    <!-- Row 1 -->
+                    @forelse ($sensorHistory as $index => $history)
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">1</td>
+                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">{{ $index + 1 }}</td>
                         <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">14:45 WIB</div>
+                            @php
+                                $histTime = $history->created_at->setTimezone('Asia/Jakarta');
+                            @endphp
+                            <div class="text-sm font-medium text-black dark:text-white">{{ $histTime->format('d M Y') }}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">{{ $histTime->format('H:i') }} WIB</div>
                         </td>
                         <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">37.82°C</span>
+                            <span class="text-sm font-semibold text-black dark:text-white">{{ number_format($history->temperature, 2) }}°C</span>
                         </td>
                         <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">61.5%</span>
+                            <span class="text-sm font-semibold text-black dark:text-white">{{ number_format($history->humidity, 1) }}%</span>
                         </td>
                         <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
-                                <span class="w-1.5 h-1.5 rounded-full bg-green-500 dark:bg-green-400"></span>
-                                Optimal
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Row 2 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">2</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">14:15 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">38.65°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">58.2%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-600 text-white border border-transparent shadow-md transition-transform duration-200 hover:scale-105">
-                                <span class="w-1.5 h-1.5 rounded-full bg-red-500 dark:bg-red-400"></span>
-                                Terlalu Panas
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Row 3 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">3</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">13:45 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">37.91°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">66.8%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
+                            @php
+                                $temp = (float)$history->temperature;
+                                $hum = (float)$history->humidity;
+                                if ($temp > 38.5) {
+                                    $statusClass = 'bg-red-600';
+                                    $statusText = 'Terlalu Panas';
+                                } elseif ($temp < 37.0) {
+                                    $statusClass = 'bg-red-600';
+                                    $statusText = 'Kurang Panas';
+                                } elseif ($hum > 65.0) {
+                                    $statusClass = 'bg-blue-600';
+                                    $statusText = 'Terlalu Lembap';
+                                } elseif ($hum < 50.0) {
+                                    $statusClass = 'bg-blue-600';
+                                    $statusText = 'Kurang Lembap';
+                                } else {
+                                    $statusClass = 'bg-green-600';
+                                    $statusText = 'Optimal';
+                                }
+                            @endphp
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium {{ $statusClass }} text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
                                 <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                                Terlalu Lembap
+                                {{ $statusText }}
                             </span>
                         </td>
                     </tr>
-
-                    <!-- Row 4 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">4</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">13:15 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">37.50°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">59.0%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                                Optimal
-                            </span>
+                    @empty
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-sm text-slate-500 dark:text-slate-400">
+                            Belum ada riwayat data sensor untuk perangkat ini.
                         </td>
                     </tr>
-
-                    <!-- Row 5 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">5</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">12:45 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">36.80°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">57.3%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105"><span class="w-1.5 h-1.5 rounded-full bg-white"></span> Kurang Panas</span>
-                        </td>
-                    </tr>
-
-                    <!-- Row 6 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">6</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">12:15 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">37.75°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">52.1%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                                Kurang Lembap
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Row 7 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">7</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">11:45 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">37.88°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">58.9%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                                Optimal
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Row 8 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">8</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">11:15 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">38.72°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">60.5%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-red-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                                Terlalu Panas
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Row 9 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">9</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">10:45 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">37.55°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">67.4%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                                Terlalu Lembap
-                            </span>
-                        </td>
-                    </tr>
-
-                    <!-- Row 10 -->
-                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">10</td>
-                        <td class="py-3.5 px-3">
-                            <div class="text-sm font-medium text-black dark:text-white">12 Mei 2026</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">10:15 WIB</div>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">37.60°C</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="text-sm font-semibold text-black dark:text-white">57.8%</span>
-                        </td>
-                        <td class="py-3.5 px-3">
-                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-green-600 text-white border border-transparent shadow-sm transition-transform duration-200 hover:scale-105">
-                                <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
-                                Optimal
-                            </span>
-                        </td>
-                    </tr>
-
+                    @endforelse
                 </tbody>
             </table>
         </div>
 
-        <!-- Table Footer -->
         <div class="flex flex-col sm:flex-row items-center justify-between gap-3 mt-5 pt-4 border-t border-slate-200 dark:border-slate-800/60">
-            <p class="text-xs text-slate-500 dark:text-slate-400">Menampilkan <span class="font-medium text-black dark:text-white">10</span> data terbaru dari total <span class="font-medium text-black dark:text-white">1.284</span> catatan</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Menampilkan <span class="font-medium text-black dark:text-white">{{ $sensorHistory->count() }}</span> data terbaru dari total <span class="font-medium text-black dark:text-white">{{ number_format($sensorCount) }}</span> catatan</p>
             <div class="flex items-center gap-1.5">
                 <button class="px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Sebelumnya</button>
                 <button class="px-3 py-1.5 text-xs font-medium text-white bg-slate-900 dark:bg-white dark:text-slate-900 rounded-lg border border-transparent transition-colors">1</button>
@@ -534,6 +458,15 @@
 @endsection
 
 @section('scripts')
+<script>
+    const sensorDataHistory = @json($sensorHistory->reverse()->values()->map(function($item) {
+        return [
+            'time' => $item->created_at->setTimezone('Asia/Jakarta')->format('H:i'),
+            'temp' => (float)$item->temperature,
+            'hum' => (float)$item->humidity
+        ];
+    }));
+</script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('toggle-data-table');
@@ -553,34 +486,94 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const chartFilter = document.getElementById('chart-filter');
+    // Render Dynamic SVG Chart
+    const totalPoints = sensorDataHistory.length;
     const areaSuhu = document.getElementById('chart-area-suhu');
     const lineSuhu = document.getElementById('chart-line-suhu');
     const lineKelembaban = document.getElementById('chart-line-kelembaban');
+
+    if (totalPoints > 1 && areaSuhu && lineSuhu && lineKelembaban) {
+        const minTemp = 34;
+        const maxTemp = 40;
+        const minHum = 40;
+        const maxHum = 80;
+
+        let lineTempPoints = [];
+        let areaTempPoints = [];
+        let lineHumPoints = [];
+
+        sensorDataHistory.forEach((point, i) => {
+            const x = (i / (totalPoints - 1)) * 100;
+            
+            let tVal = point.temp;
+            if (tVal < minTemp) tVal = minTemp;
+            if (tVal > maxTemp) tVal = maxTemp;
+            const yTemp = 100 - ((tVal - minTemp) / (maxTemp - minTemp)) * 100;
+            lineTempPoints.push(`${x.toFixed(1)},${yTemp.toFixed(1)}`);
+            areaTempPoints.push(`${x.toFixed(1)},${yTemp.toFixed(1)}`);
+
+            let hVal = point.hum;
+            if (hVal < minHum) hVal = minHum;
+            if (hVal > maxHum) hVal = maxHum;
+            const yHum = 100 - ((hVal - minHum) / (maxHum - minHum)) * 100;
+            lineHumPoints.push(`${x.toFixed(1)},${yHum.toFixed(1)}`);
+        });
+
+        const pathLineTemp = "M" + lineTempPoints.join(" L");
+        const pathAreaTemp = pathLineTemp + " L100,100 L0,100 Z";
+        const pathLineHum = "M" + lineHumPoints.join(" L");
+
+        lineSuhu.setAttribute('d', pathLineTemp);
+        areaSuhu.setAttribute('d', pathAreaTemp);
+        lineKelembaban.setAttribute('d', pathLineHum);
+
+        const xLabelsContainer = document.querySelector('.absolute.-bottom-6.left-4.right-0');
+        if (xLabelsContainer) {
+            const labelIndexes = [
+                0, 
+                Math.floor(totalPoints * 0.25), 
+                Math.floor(totalPoints * 0.5), 
+                Math.floor(totalPoints * 0.75), 
+                totalPoints - 1
+            ];
+            const labelHtml = labelIndexes.map(idx => `<span>${sensorDataHistory[idx] ? sensorDataHistory[idx].time : ''}</span>`).join('');
+            xLabelsContainer.innerHTML = labelHtml;
+        }
+    } else if (totalPoints === 1 && areaSuhu && lineSuhu && lineKelembaban) {
+        lineSuhu.setAttribute('d', 'M0,50 L100,50');
+        areaSuhu.setAttribute('d', 'M0,50 L100,50 L100,100 L0,100 Z');
+        lineKelembaban.setAttribute('d', 'M0,70 L100,70');
+    } else if (areaSuhu && lineSuhu && lineKelembaban) {
+        lineSuhu.setAttribute('d', '');
+        areaSuhu.setAttribute('d', '');
+        lineKelembaban.setAttribute('d', '');
+    }
+
+    const chartFilter = document.getElementById('chart-filter');
     const legendSuhu = document.getElementById('legend-suhu');
     const legendKelembaban = document.getElementById('legend-kelembaban');
 
-    if (chartFilter) {
+    if (chartFilter && areaSuhu && lineSuhu && lineKelembaban) {
         chartFilter.addEventListener('change', (e) => {
             const val = e.target.value;
             if (val === 'all') {
                 areaSuhu.style.opacity = '1';
                 lineSuhu.style.opacity = '1';
                 lineKelembaban.style.opacity = '1';
-                legendSuhu.style.opacity = '1';
-                legendKelembaban.style.opacity = '1';
+                if (legendSuhu) legendSuhu.style.opacity = '1';
+                if (legendKelembaban) legendKelembaban.style.opacity = '1';
             } else if (val === 'suhu') {
                 areaSuhu.style.opacity = '1';
                 lineSuhu.style.opacity = '1';
                 lineKelembaban.style.opacity = '0';
-                legendSuhu.style.opacity = '1';
-                legendKelembaban.style.opacity = '0.3';
+                if (legendSuhu) legendSuhu.style.opacity = '1';
+                if (legendKelembaban) legendKelembaban.style.opacity = '0.3';
             } else if (val === 'kelembaban') {
                 areaSuhu.style.opacity = '0';
                 lineSuhu.style.opacity = '0';
                 lineKelembaban.style.opacity = '1';
-                legendSuhu.style.opacity = '0.3';
-                legendKelembaban.style.opacity = '1';
+                if (legendSuhu) legendSuhu.style.opacity = '0.3';
+                if (legendKelembaban) legendKelembaban.style.opacity = '1';
             }
         });
     }

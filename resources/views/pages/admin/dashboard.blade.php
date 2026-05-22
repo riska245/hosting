@@ -73,7 +73,7 @@
 
 <!-- Database Pengguna (Ringkasan) -->
 <div class="px-1 sm:px-2 md:px-0 mb-6 sm:mb-8">
-    <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 transition-all duration-300">
+    <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 transition-all duration-300">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h3 class="font-semibold text-black dark:text-white transition-colors flex items-center gap-2">
@@ -96,40 +96,40 @@
             </div>
         </div>
 
-        <div class="overflow-x-auto -mx-5 sm:-mx-6 px-5 sm:px-6">
-            <table class="w-full min-w-[980px]">
+        <div class="overflow-x-auto -mx-4 sm:-mx-6 px-4 sm:px-6 custom-scrollbar">
+            <table class="w-full min-w-[1000px]">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-slate-700/60">
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">No</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Username</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kode Inkubator</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Suhu</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kelembapan</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pemutaran</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Update Sensor</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Login</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Login Terakhir</th>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider rounded-l-xl">No</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Username</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kode Inkubator</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Suhu</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kelembapan</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pemutaran</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Update Sensor</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Login</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider rounded-r-xl">Login Terakhir</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
                     @forelse($userSummary as $index => $user)
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">{{ $index + 1 }}</td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4 text-sm text-slate-500 dark:text-slate-400 font-mono">{{ $index + 1 }}</td>
+                        <td class="py-3.5 px-4">
                             <div class="flex items-center gap-2.5">
                                 <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shrink-0">{{ strtoupper(substr($user->username, 0, 1)) }}</div>
                                 <span class="text-sm font-semibold text-black dark:text-white">{{ $user->username }}</span>
                             </div>
                         </td>
-                        <td class="py-3.5 px-3 text-sm text-slate-600 dark:text-slate-300">{{ $user->email ?? '-' }}</td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4 text-sm text-slate-600 dark:text-slate-300">{{ $user->email ?? '-' }}</td>
+                        <td class="py-3.5 px-4">
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-500/20">
                                 <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
                                 {{ $user->incubator_code ?? '-' }}
                             </span>
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             @if(!is_null($user->temperature))
                                 <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-500/20">
                                     {{ number_format((float) $user->temperature, 1) }}&deg;C
@@ -138,7 +138,7 @@
                                 <span class="text-sm text-slate-400">Belum ada data</span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             @if(!is_null($user->humidity))
                                 <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-500/20">
                                     {{ number_format((float) $user->humidity, 1) }}%
@@ -147,7 +147,7 @@
                                 <span class="text-sm text-slate-400">Belum ada data</span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             @if($user->next_turn_at)
                                 <div class="space-y-1">
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium {{ $user->turning_is_due ? 'bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-500/20' : 'bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20' }}">
@@ -161,7 +161,7 @@
                                 <span class="text-sm text-slate-400">Belum ada data</span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             @if($user->sensor_updated_at)
                                 <div class="space-y-1">
                                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium {{ $user->sensor_is_fresh ? 'bg-green-100 dark:bg-green-500/15 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-500/20' : 'bg-yellow-100 dark:bg-yellow-500/15 text-yellow-700 dark:text-yellow-300 border border-yellow-200 dark:border-yellow-500/20' }}">
@@ -175,10 +175,10 @@
                                 <span class="text-sm text-slate-400">Belum ada data</span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300">{{ $user->total_login }}x</span>
                         </td>
-                        <td class="py-3.5 px-3 text-sm text-slate-600 dark:text-slate-300">
+                        <td class="py-3.5 px-4 text-sm text-slate-600 dark:text-slate-300">
                             @if($user->last_login)
                                 {{ \Carbon\Carbon::parse($user->last_login)->format('d M Y, H:i') }}
                             @else
@@ -199,7 +199,7 @@
 
 <!-- Riwayat Login User -->
 <div class="px-1 sm:px-2 md:px-0 mb-6 sm:mb-8">
-    <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 transition-all duration-300">
+    <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 transition-all duration-300">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h3 class="font-semibold text-black dark:text-white transition-colors flex items-center gap-2">
@@ -210,33 +210,35 @@
             </div>
             <span class="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                {{ $userLogins->count() }} catatan
+                {{ $userLogins instanceof \Illuminate\Pagination\LengthAwarePaginator ? $userLogins->total() : $userLogins->count() }} catatan
             </span>
         </div>
 
-        <div class="overflow-x-auto -mx-5 sm:-mx-6 px-5 sm:px-6">
-            <table class="w-full min-w-[700px]">
+        <div class="overflow-x-auto -mx-4 sm:-mx-6 px-4 sm:px-6 custom-scrollbar">
+            <table class="w-full min-w-[720px]">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-slate-700/60">
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">No</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Username</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kode Inkubator</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Waktu Masuk</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">IP Address</th>
-                        <th class="text-left py-3 px-3 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Device</th>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider rounded-l-xl">No</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Username</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kode Inkubator</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Waktu Masuk</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">IP Address</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider rounded-r-xl">Device</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
                     @forelse($userLogins as $index => $log)
                     <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
-                        <td class="py-3.5 px-3 text-sm text-slate-500 dark:text-slate-400 font-mono">{{ $index + 1 }}</td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4 text-sm text-slate-500 dark:text-slate-400 font-mono">
+                            {{ $userLogins instanceof \Illuminate\Pagination\LengthAwarePaginator ? ($userLogins->currentPage() - 1) * $userLogins->perPage() + $index + 1 : $index + 1 }}
+                        </td>
+                        <td class="py-3.5 px-4">
                             <span class="text-sm font-semibold text-black dark:text-white">{{ $log->username }}</span>
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-orange-100 dark:bg-orange-500/15 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-500/20">{{ $log->incubator_code ?? '-' }}</span>
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             @if($log->login_at)
                             <div class="text-sm font-medium text-black dark:text-white">{{ \Carbon\Carbon::parse($log->login_at)->format('d M Y') }}</div>
                             <div class="text-xs text-slate-500 dark:text-slate-400">{{ \Carbon\Carbon::parse($log->login_at)->format('H:i:s') }} WIB</div>
@@ -244,10 +246,10 @@
                             <span class="text-sm text-slate-400">-</span>
                             @endif
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             <span class="text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{{ $log->ip_address ?? '-' }}</span>
                         </td>
-                        <td class="py-3.5 px-3">
+                        <td class="py-3.5 px-4">
                             @php
                                 $ua = $log->user_agent ?? '';
                                 if (str_contains($ua, 'Mobile')) $device = '📱 Mobile';
@@ -272,6 +274,81 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Pagination Controls -->
+        @if($userLogins instanceof \Illuminate\Pagination\LengthAwarePaginator && $userLogins->hasPages())
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <!-- Info text -->
+                <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium text-center sm:text-left">
+                    Menampilkan <span class="font-semibold text-slate-800 dark:text-slate-200">{{ $userLogins->firstItem() }}</span> 
+                    sampai <span class="font-semibold text-slate-800 dark:text-slate-200">{{ $userLogins->lastItem() }}</span> 
+                    dari <span class="font-semibold text-slate-800 dark:text-slate-200">{{ $userLogins->total() }}</span> catatan login
+                </div>
+
+                <!-- Navigation buttons -->
+                <nav class="flex items-center gap-1.5" aria-label="Pagination Navigasi">
+                    <!-- Previous Button -->
+                    @if($userLogins->onFirstPage())
+                        <span class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl cursor-not-allowed select-none">
+                            <svg class="w-4 h-4 mr-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            Sebelumnya
+                        </span>
+                    @else
+                        <a href="{{ $userLogins->previousPageUrl() }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 active:scale-[0.97]">
+                            <svg class="w-4 h-4 mr-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            Sebelumnya
+                        </a>
+                    @endif
+
+                    <!-- Page Number Links -->
+                    @php
+                        $currentPage = $userLogins->currentPage();
+                        $lastPage = $userLogins->lastPage();
+                        $startPage = max(1, $currentPage - 2);
+                        $endPage = min($lastPage, $currentPage + 2);
+                    @endphp
+
+                    @if($startPage > 1)
+                        <a href="{{ $userLogins->url(1) }}" class="inline-flex items-center justify-center w-8 h-8 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 active:scale-[0.95]">1</a>
+                        @if($startPage > 2)
+                            <span class="px-1 text-xs text-slate-400 dark:text-slate-600 select-none">...</span>
+                        @endif
+                    @endif
+
+                    @for($page = $startPage; $page <= $endPage; $page++)
+                        @if($page == $currentPage)
+                            <span class="inline-flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-blue-600 rounded-xl shadow-[0_4px_12px_rgba(37,99,235,0.25)] border border-blue-600 select-none">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $userLogins->url($page) }}" class="inline-flex items-center justify-center w-8 h-8 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 active:scale-[0.95]">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endfor
+
+                    @if($endPage < $lastPage)
+                        @if($endPage < $lastPage - 1)
+                            <span class="px-1 text-xs text-slate-400 dark:text-slate-600 select-none">...</span>
+                        @endif
+                        <a href="{{ $userLogins->url($lastPage) }}" class="inline-flex items-center justify-center w-8 h-8 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 active:scale-[0.95]">{{ $lastPage }}</a>
+                    @endif
+
+                    <!-- Next Button -->
+                    @if($userLogins->hasMorePages())
+                        <a href="{{ $userLogins->nextPageUrl() }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 active:scale-[0.97]">
+                            Berikutnya
+                            <svg class="w-4 h-4 ml-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    @else
+                        <span class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl cursor-not-allowed select-none">
+                            Berikutnya
+                            <svg class="w-4 h-4 ml-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </span>
+                    @endif
+                </nav>
+            </div>
+        @endif
     </div>
 </div>
 @endsection

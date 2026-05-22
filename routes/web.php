@@ -45,45 +45,30 @@ Route::get('/kontak', function () {
 
 /*
 |--------------------------------------------------------------------------
-| PILIH LOGIN
+| LOGIN & REGISTRASI USER
 |--------------------------------------------------------------------------
 */
 
 Route::get('/login', function () {
-    return view('pages.choose-login');
+    if (Session::get('login')) {
+        if (Session::get('role') === 'admin') {
+            return redirect('/admin-dashboard');
+        }
+        return redirect('/dashboard-detail');
+    }
+    return view('pages.user.login');
 });
 
-/*
-|--------------------------------------------------------------------------
-| LOGIN USER
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/login-user', function () {
-    return view('pages.login-user');
-});
-
-/*
-|--------------------------------------------------------------------------
-| LOGIN ADMIN
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/login-admin', function () {
-    return view('pages.login-admin');
-});
-
-/*
-|--------------------------------------------------------------------------
-| PROSES LOGIN USER
-|--------------------------------------------------------------------------
-*/
-
-Route::post('/login-user-process', function (Request $request) {
+Route::post('/login', function (Request $request) {
     $credentials = $request->validate([
         'username' => 'required|string',
         'email' => 'required|email',
         'password' => 'required|string',
+    ], [
+        'username.required' => 'Nama / Username wajib diisi.',
+        'email.required' => 'Email wajib diisi.',
+        'email.email' => 'Format email tidak valid.',
+        'password.required' => 'Password wajib diisi.',
     ]);
 
     $user = User::where('role', 'user')
@@ -92,7 +77,7 @@ Route::post('/login-user-process', function (Request $request) {
         ->first();
 
     if (!$user || !Hash::check($credentials['password'], $user->password)) {
-        return back()->with('error', 'Username, email, atau password user salah!');
+        return back()->withInput()->with('error', 'Nama, email, atau password user salah!');
     }
 
     DB::table('login_users')->insert([
@@ -117,26 +102,96 @@ Route::post('/login-user-process', function (Request $request) {
     return redirect('/dashboard-detail');
 });
 
+Route::get('/register', function () {
+    if (Session::get('login')) {
+        if (Session::get('role') === 'admin') {
+            return redirect('/admin-dashboard');
+        }
+        return redirect('/dashboard-detail');
+    }
+    return view('pages.user.register');
+});
+
+Route::post('/register', function (Request $request) {
+    $data = $request->validate([
+        'username' => 'required|string|max:255|unique:users,username',
+        'email' => 'required|email|max:255|unique:users,email',
+        'incubator_code' => 'required|string|max:255|unique:users,incubator_code',
+        'password' => 'required|string|min:6',
+    ], [
+        'username.required' => 'Nama / Username wajib diisi.',
+        'username.unique' => 'Nama / Username sudah terdaftar.',
+        'email.required' => 'Email wajib diisi.',
+        'email.email' => 'Format email tidak valid.',
+        'email.unique' => 'Email sudah terdaftar.',
+        'incubator_code.required' => 'Nomor Inkubator wajib diisi.',
+        'incubator_code.unique' => 'Nomor Inkubator sudah terdaftar.',
+        'password.required' => 'Password wajib diisi.',
+        'password.min' => 'Password minimal terdiri dari 6 karakter.',
+    ]);
+
+    $user = User::create([
+        'name' => $data['username'],
+        'username' => $data['username'],
+        'email' => $data['email'],
+        'incubator_code' => $data['incubator_code'],
+        'password' => Hash::make($data['password']),
+        'role' => 'user',
+    ]);
+
+    DB::table('login_users')->insert([
+        'username' => $user->username,
+        'email' => $user->email,
+        'incubator_code' => $user->incubator_code,
+        'role' => 'user',
+        'ip_address' => $request->ip(),
+        'user_agent' => $request->userAgent(),
+        'login_at' => now(),
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    Session::put('login', true);
+    Session::put('user_id', $user->id);
+    Session::put('role', 'user');
+    Session::put('username', $user->username);
+    Session::put('email', $user->email);
+    Session::put('incubator_code', $user->incubator_code);
+
+    return redirect('/dashboard-detail')->with('success', 'Registrasi berhasil dan Anda telah masuk.');
+});
+
 /*
 |--------------------------------------------------------------------------
-| PROSES LOGIN ADMIN
+| LOGIN & PORTAL ADMIN
 |--------------------------------------------------------------------------
 */
 
-Route::post('/login-admin-process', function (Request $request) {
+Route::get('/admin', function () {
+    if (Session::get('login') && Session::get('role') === 'admin') {
+        return redirect('/admin-dashboard');
+    }
+    return view('pages.admin.login');
+});
+
+Route::post('/admin', function (Request $request) {
     $credentials = $request->validate([
-        'username' => 'required|string',
-        'email' => 'required|email',
+        'username_or_email' => 'required|string',
         'password' => 'required|string',
+    ], [
+        'username_or_email.required' => 'Username atau Email wajib diisi.',
+        'password.required' => 'Password wajib diisi.',
     ]);
 
     $admin = User::where('role', 'admin')
-        ->where('username', $credentials['username'])
-        ->where('email', $credentials['email'])
+        ->where(function ($query) use ($credentials) {
+            $query->where('username', $credentials['username_or_email'])
+                  ->orWhere('email', $credentials['username_or_email']);
+        })
         ->first();
 
     if (!$admin || !Hash::check($credentials['password'], $admin->password)) {
-        return back()->with('error', 'Username, email, atau password admin salah!');
+        return back()->withInput()->with('error', 'Username/Email atau password admin salah!');
     }
 
     Session::put('login', true);
@@ -177,8 +232,9 @@ Route::get('/dashboard-detail', function () {
     $incubatorCode = Session::get('incubator_code');
     $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
     $sensorHistory = SensorData::where('incubator_code', $incubatorCode)->latest()->limit(10)->get();
+    $sensorCount = SensorData::where('incubator_code', $incubatorCode)->count();
 
-    return view('pages.dashboard-detail', compact('latestSensor', 'sensorHistory'));
+    return view('pages.user.dashboard', compact('latestSensor', 'sensorHistory', 'sensorCount'));
 });
 
 /*
@@ -189,7 +245,7 @@ Route::get('/dashboard-detail', function () {
 
 Route::get('/admin-dashboard', function () {
     if (!Session::get('login')) {
-        return redirect('/login-admin');
+        return redirect('/admin');
     }
 
     if (Session::get('role') !== 'admin') {
@@ -251,7 +307,7 @@ Route::get('/admin-dashboard', function () {
     $userLogins = DB::table('login_users')
         ->where('role', 'user')
         ->orderBy('login_at', 'desc')
-        ->get();
+        ->paginate(10);
 
     $totalUsers = $registeredUsers->count();
 
@@ -268,7 +324,7 @@ Route::get('/admin-dashboard', function () {
         ->whereYear('login_at', now()->year)
         ->count();
 
-    return view('pages.dashboard-admin', compact(
+    return view('pages.admin.dashboard', compact(
         'userLogins',
         'totalUsers',
         'todayLogins',
