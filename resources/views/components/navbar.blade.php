@@ -3,11 +3,11 @@
 @endphp
 
 <header class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 sm:pt-4 px-3 sm:px-4 pointer-events-none">
-    <div class="app-navbar pointer-events-auto w-full max-w-5xl border rounded-2xl lg:rounded-full transition-colors duration-300 overflow-visible">
+    <div class="app-navbar pointer-events-auto inline-flex items-center max-w-full border rounded-2xl lg:rounded-full transition-colors duration-300 overflow-visible backdrop-blur-xl">
         
-        <div class="flex items-center justify-between px-4 sm:px-5 lg:px-6 xl:px-8 py-2.5">
+        <div class="flex items-center justify-between gap-4 px-4 py-2.5 whitespace-nowrap">
             <!-- Left: Logo & Nav -->
-            <div class="flex items-center gap-3 lg:gap-4 xl:gap-8">
+            <div class="flex items-center gap-4 lg:gap-5">
                 <a href="/" class="flex items-center gap-2 group shrink-0">
                     <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/10 flex items-center justify-center border border-blue-200 dark:border-blue-500/20 group-hover:scale-110 transition-transform">
                         <span class="text-xl">🐣</span>
@@ -18,7 +18,7 @@
                 </a>
 
                 <!-- Desktop Nav -->
-                <nav class="hidden lg:flex items-center gap-0.5 lg:gap-1 xl:gap-2">
+                <nav class="hidden lg:flex items-center gap-1">
                     <a href="/" class="px-2.5 lg:px-3 xl:px-4 py-1.5 rounded-full text-xs xl:text-sm font-medium transition-colors {{ $currentRoute == '/' ? 'bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400' : 'text-black dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-50 dark:hover:bg-blue-500/5' }}">
                         Beranda
                     </a>
@@ -47,7 +47,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                     </div>
-                    <input type="text" id="searchInput" autocomplete="off" placeholder="Cari data..." class="app-input w-28 sm:w-32 lg:w-28 xl:w-44 pl-9 pr-4 py-1.5 border rounded-full text-xs xl:text-sm placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none transition-all focus:w-36 sm:focus:w-40 lg:focus:w-36 xl:focus:w-52">
+                    <input type="text" id="searchInput" autocomplete="off" placeholder="Cari data..." class="app-input w-24 lg:w-28 pl-9 pr-4 py-1.5 border rounded-full text-xs xl:text-sm placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none transition-all focus:w-36">
                     
                     <!-- Search Results Dropdown -->
                     <div id="searchResults" class="app-popover absolute top-full right-0 mt-2 w-80 sm:w-96 border rounded-2xl overflow-hidden hidden max-h-96 flex-col z-[100] shadow-xl">

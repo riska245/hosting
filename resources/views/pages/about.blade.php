@@ -1,6 +1,86 @@
 @extends('layouts.main')
 
 @section('content')
+<style>
+    .social-container {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        margin-top: 20px !important;
+    }
+
+    .social-btn {
+        width: 40px !important;
+        height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 9999px !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06) !important;
+        text-decoration: none !important;
+    }
+
+    .social-btn:hover {
+        transform: scale(1.1) !important;
+    }
+
+    /* TikTok - Light Mode (Black background, white icon) */
+    .social-tiktok {
+        background-color: #000000 !important;
+        color: #ffffff !important;
+        border: 1px solid #000000 !important;
+    }
+    .social-tiktok:hover {
+        background-color: #27272a !important;
+        border-color: #27272a !important;
+    }
+    .social-tiktok svg,
+    .social-tiktok svg path {
+        fill: #ffffff !important;
+        color: #ffffff !important;
+    }
+
+    /* TikTok - Dark Mode (White background, black icon) */
+    .dark .social-tiktok {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        border: 1px solid #ffffff !important;
+    }
+    .dark .social-tiktok:hover {
+        background-color: #e4e4e7 !important;
+        border-color: #e4e4e7 !important;
+    }
+    .dark .social-tiktok svg,
+    .dark .social-tiktok svg path {
+        fill: #000000 !important;
+        color: #000000 !important;
+    }
+
+    /* Instagram - Light & Dark Mode (Purple background, white icon) */
+    .social-instagram {
+        background-color: #9333ea !important; /* purple-600 */
+        color: #ffffff !important;
+        border: 1px solid #9333ea !important;
+    }
+    .social-instagram:hover {
+        background-color: #7e22ce !important; /* purple-700 */
+        border-color: #7e22ce !important;
+    }
+    .social-instagram svg,
+    .social-instagram svg path {
+        fill: #ffffff !important;
+        color: #ffffff !important;
+    }
+
+    /* Ensure SVGs inside are sized correctly */
+    .social-btn svg {
+        width: 20px !important;
+        height: 20px !important;
+        display: block !important;
+    }
+</style>
 <div class="max-w-6xl mx-auto py-6 sm:py-8 md:py-12 animate-fade-in-up px-2 sm:px-4 md:px-0">
 
     <!-- Judul Tentang Inkubator -->
@@ -102,15 +182,15 @@
             </div>
 
             <!-- GRID PROFIL-->
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
 
                 <!-- Profil 1 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Naya.jpeg') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
@@ -125,24 +205,40 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com/@"
+                           target="_blank"
+                           class="social-btn social-tiktok"
+                           title="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.68h-3.227v12.93a2.896 2.896 0 1 1-2.896-2.896c.298 0 .586.045.857.127V8.9a6.122 6.122 0 0 0-.857-.061A6.123 6.123 0 1 0 15.82 14.96V8.356a8.018 8.018 0 0 0 4.68 1.49V6.686h-.911z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Profil 2 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Wyldan.png') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
-                        Mochammad Wyldan
+                        Mochammad Wyldan Dafriansyah
                     </h3>
 
                     <p class="text-blue-600 dark:text-slate-300 text-sm mb-4 transition-colors">
@@ -153,20 +249,36 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com/@mh18047"
+                           target="_blank"
+                           class="social-btn social-tiktok"
+                           title="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.68h-3.227v12.93a2.896 2.896 0 1 1-2.896-2.896c.298 0 .586.045.857.127V8.9a6.122 6.122 0 0 0-.857-.061A6.123 6.123 0 1 0 15.82 14.96V8.356a8.018 8.018 0 0 0 4.68 1.49V6.686h-.911z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/wildanfriansyah"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Profil 3 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Yuna.png') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
@@ -181,20 +293,36 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com/@you.na15"
+                           target="_blank"
+                           class="social-btn social-tiktok"
+                           title="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.68h-3.227v12.93a2.896 2.896 0 1 1-2.896-2.896c.298 0 .586.045.857.127V8.9a6.122 6.122 0 0 0-.857-.061A6.123 6.123 0 1 0 15.82 14.96V8.356a8.018 8.018 0 0 0 4.68 1.49V6.686h-.911z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/you_na.189."
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Profil 4 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Rena.png') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
@@ -209,20 +337,36 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com/@zooternana"
+                           target="_blank"
+                           class="social-btn social-tiktok"
+                           title="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.68h-3.227v12.93a2.896 2.896 0 1 1-2.896-2.896c.298 0 .586.045.857.127V8.9a6.122 6.122 0 0 0-.857-.061A6.123 6.123 0 1 0 15.82 14.96V8.356a8.018 8.018 0 0 0 4.68 1.49V6.686h-.911z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/rna_naptr"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Profil 5 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Saida.png') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
@@ -237,20 +381,36 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com/@"
+                           target="_blank"
+                           class="social-btn social-tiktok"
+                           title="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.68h-3.227v12.93a2.896 2.896 0 1 1-2.896-2.896c.298 0 .586.045.857.127V8.9a6.122 6.122 0 0 0-.857-.061A6.123 6.123 0 1 0 15.82 14.96V8.356a8.018 8.018 0 0 0 4.68 1.49V6.686h-.911z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Profil 5 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Seves.png') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
@@ -265,11 +425,27 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com/@"
+                           target="_blank"
+                           class="social-btn social-tiktok"
+                           title="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.68h-3.227v12.93a2.896 2.896 0 1 1-2.896-2.896c.298 0 .586.045.857.127V8.9a6.122 6.122 0 0 0-.857-.061A6.123 6.123 0 1 0 15.82 14.96V8.356a8.018 8.018 0 0 0 4.68 1.49V6.686h-.911z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
             </div>
@@ -291,15 +467,15 @@
             </div>
 
             <!-- GRID PROFIL -->
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
 
                 <!-- Profil 1 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Mufida.jpeg') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
@@ -314,20 +490,37 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://instagram.com/moe_phi
+"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/seutaslarik_"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Profil 5 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Olivia.jpeg') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
@@ -342,20 +535,36 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com/@"
+                           target="_blank"
+                           class="social-btn social-tiktok"
+                           title="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.68h-3.227v12.93a2.896 2.896 0 1 1-2.896-2.896c.298 0 .586.045.857.127V8.9a6.122 6.122 0 0 0-.857-.061A6.123 6.123 0 1 0 15.82 14.96V8.356a8.018 8.018 0 0 0 4.68 1.49V6.686h-.911z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Profil 5 -->
-                <div class="bg-white dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
+                <div class="bg-white dark:bg-slate-800/50 rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 text-center">
 
                     <img 
                         src="{{ asset('images/Riska.jpeg') }}" 
                         alt="Profile"
-                        class="w-28 h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
+                        class="w-24 h-24 sm:w-28 sm:h-28 mx-auto rounded-3xl object-cover shadow-lg mb-5"
                     >
 
                     <h3 class="text-xl font-bold text-black dark:text-white mt-3 mb-1 transition-colors">
@@ -370,11 +579,27 @@
                         Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
                     </p>
 
-                    <a href="https://tiktok.com/@rae_ccccchc"
-                        target="_blank"
-                        class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-sm transition">
-                        Tiktok
-                    </a>
+                    <div class="social-container">
+                        <!-- TikTok -->
+                        <a href="https://tiktok.com/@rae_ccccchc"
+                           target="_blank"
+                           class="social-btn social-tiktok"
+                           title="TikTok">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.68h-3.227v12.93a2.896 2.896 0 1 1-2.896-2.896c.298 0 .586.045.857.127V8.9a6.122 6.122 0 0 0-.857-.061A6.123 6.123 0 1 0 15.82 14.96V8.356a8.018 8.018 0 0 0 4.68 1.49V6.686h-.911z"/>
+                            </svg>
+                        </a>
+
+                        <!-- Instagram -->
+                        <a href="https://instagram.com/"
+                           target="_blank"
+                           class="social-btn social-instagram"
+                           title="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path d="M7.75 2C4.574 2 2 4.574 2 7.75v8.5C2 19.426 4.574 22 7.75 22h8.5C19.426 22 22 19.426 22 16.25v-8.5C22 4.574 19.426 2 16.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0 1 20 7.75v8.5A3.75 3.75 0 0 1 16.25 20h-8.5A3.75 3.75 0 0 1 4 16.25v-8.5A3.75 3.75 0 0 1 7.75 4zm8.75 1a1.25 1.25 0 1 0 0 2.5A1.25 1.25 0 0 0 16.5 5zM12 7a5 5 0 1 0 0 10a5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6a3 3 0 0 1 0-6z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
