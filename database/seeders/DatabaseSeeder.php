@@ -17,43 +17,27 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Admin Utama',
                 'username' => 'admin',
-                'email' => 'admin@inkubator.test',
+                'email' => 'admin@gmail.com',
                 'password' => '2026ceria',
                 'role' => 'admin',
                 'incubator_code' => null,
             ],
             [
                 'name' => 'Admin Kedua',
-                'username' => 'admin2',
-                'email' => 'admin2@inkubator.test',
-                'password' => '2026ceria2',
+                'username' => 'rae',
+                'email' => 'raeunyah@gmail.com',
+                'password' => 'adminimup',
                 'role' => 'admin',
                 'incubator_code' => null,
-            ],
-            [
-                'name' => 'User Inkubator 1',
-                'username' => 'user',
-                'email' => 'user@inkubator.test',
-                'password' => 'user123',
-                'role' => 'user',
-                'incubator_code' => 'INC-001X',
-            ],
-            [
-                'name' => 'User Inkubator 2',
-                'username' => 'user2',
-                'email' => 'user2@inkubator.test',
-                'password' => 'user2123',
-                'role' => 'user',
-                'incubator_code' => 'INC-002X',
             ],
         ];
 
         foreach ($accounts as $account) {
             User::updateOrCreate(
-                ['email' => $account['email']],
+                ['username' => $account['username']], // Menggunakan username sebagai pencarian unik agar tidak bentrok duplicate entry
                 [
                     'name' => $account['name'],
-                    'username' => $account['username'],
+                    'email' => $account['email'],
                     'password' => Hash::make($account['password']),
                     'role' => $account['role'],
                     'incubator_code' => $account['incubator_code'],
