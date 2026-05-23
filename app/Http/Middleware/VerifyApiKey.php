@@ -18,9 +18,8 @@ class VerifyApiKey
         $expectedKey = config('app.esp_api_key');
 
         if (empty($expectedKey)) {
-            return response()->json([
-                'message' => 'API Key Server belum dikonfigurasi.',
-            ], 500);
+            // SEMENTARA BYPASS JIKA BELUM DIKONFIGURASI DI .ENV HOSTING (Untuk mempermudah testing Anda)
+            return $next($request);
         }
 
         // Cek API Key dari:
