@@ -359,3 +359,24 @@ Route::get('/send-alert', function () {
 
     return "Email notifikasi berhasil dikirim!";
 });
+
+// Route Pembantu Sementara untuk Menjalankan Migrasi & Seed Database di Server Online
+Route::get('/run-migrations-online', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', [
+            '--force' => true,
+            '--seed' => true
+        ]);
+        
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Database online berhasil dimigrasi dan diseed (diisi data awal)!',
+            'output' => \Illuminate\Support\Facades\Artisan::output()
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Gagal menjalankan migrasi: ' . $e->getMessage()
+        ], 500);
+    }
+});
