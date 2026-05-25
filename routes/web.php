@@ -736,13 +736,15 @@ Route::delete('/admin/delete-user/{id}', function (Request $request, $id) {
     $incubator = $user->incubator_code;
 
     // Log aktivitas sebelum dihapus agar data username & incubator masih valid
-    \App\Models\AdminActivity::create([
-        'username' => Session::get('username'),
-        'activity' => 'delete_user',
-        'description' => "Menghapus user: {$username} (Inkubator: {$incubator})",
-        'ip_address' => $request->ip(),
-        'user_agent' => $request->userAgent(),
-    ]);
+    if (Schema::hasTable('admin_activities')) {
+        \App\Models\AdminActivity::create([
+            'username' => Session::get('username'),
+            'activity' => 'delete_user',
+            'description' => "Menghapus user: {$username} (Inkubator: {$incubator})",
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+    }
 
     $user->delete();
 
@@ -751,13 +753,15 @@ Route::delete('/admin/delete-user/{id}', function (Request $request, $id) {
 
 Route::post('/logout', function (Request $request) {
     if (Session::get('role') === 'admin') {
-        \App\Models\AdminActivity::create([
-            'username' => Session::get('username'),
-            'activity' => 'logout',
-            'description' => 'Admin logout dari sistem',
-            'ip_address' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-        ]);
+        if (Schema::hasTable('admin_activities')) {
+            \App\Models\AdminActivity::create([
+                'username' => Session::get('username'),
+                'activity' => 'logout',
+                'description' => 'Admin logout dari sistem',
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
+        }
     }
 
     Session::flush();
