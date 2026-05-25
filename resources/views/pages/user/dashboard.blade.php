@@ -660,8 +660,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function fetchRealtimeData() {
         const urlParams = new URLSearchParams(window.location.search);
         const currentPage = urlParams.get('page') || '1';
+        const realtimeUrl = `/dashboard-detail/realtime-data?t=${Date.now()}`;
 
-        fetch('/dashboard-detail/realtime-data')
+        fetch(realtimeUrl, { cache: 'no-store' })
             .then(response => response.json())
             .then(data => {
                 if (!data.has_data) return;

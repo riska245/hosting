@@ -21,8 +21,10 @@ class SensorController extends Controller
             'turned_at' => 'nullable|date',
         ]);
 
+        $normalizedIncubatorCode = strtoupper(trim($validated['incubator_code']));
+
         $incubatorExists = User::where('role', 'user')
-            ->where('incubator_code', $validated['incubator_code'])
+            ->whereRaw('UPPER(TRIM(incubator_code)) = ?', [$normalizedIncubatorCode])
             ->exists();
 
         if (!$incubatorExists) {
@@ -34,7 +36,7 @@ class SensorController extends Controller
         $now = now();
         $turningStatus = strtolower($validated['turning_status'] ?? 'menunggu');
         $turningEventStatuses = ['berputar', 'selesai', 'rotating', 'completed', 'done', 'turned'];
-        $previousTurn = SensorData::where('incubator_code', $validated['incubator_code'])
+        $previousTurn = SensorData::where('incubator_code', $normalizedIncubatorCode)
             ->whereNotNull('turned_at')
             ->latest('turned_at')
             ->first();
@@ -51,7 +53,7 @@ class SensorController extends Controller
         }
 
         $data = SensorData::create([
-            'incubator_code' => $validated['incubator_code'],
+            'incubator_code' => $normalizedIncubatorCode,
             'temperature' => $validated['temperature'],
             'humidity' => $validated['humidity'],
             'lamp_status' => $validated['lamp_status'],
@@ -75,7 +77,7 @@ class SensorController extends Controller
         $query = SensorData::query();
 
         if ($request->filled('incubator_code')) {
-            $query->where('incubator_code', $request->incubator_code);
+            $query->where('incubator_code', strtoupper(trim((string) $request->incubator_code)));
         }
 
         return response()->json($query->latest()->first());

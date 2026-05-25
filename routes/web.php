@@ -238,7 +238,7 @@ Route::get('/dashboard-detail', function () {
         return redirect('/');
     }
 
-    $incubatorCode = Session::get('incubator_code');
+    $incubatorCode = strtoupper(trim((string) Session::get('incubator_code')));
     $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
     $sensorHistory = SensorData::where('incubator_code', $incubatorCode)->latest()->paginate(10)->appends(request()->query());
     $sensorCount = $sensorHistory->total();
@@ -251,7 +251,7 @@ Route::get('/dashboard-detail/realtime-data', function () {
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    $incubatorCode = Session::get('incubator_code');
+    $incubatorCode = strtoupper(trim((string) Session::get('incubator_code')));
     $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
     
     if (!$latestSensor) {
@@ -431,7 +431,9 @@ Route::get('/dashboard-detail/realtime-data', function () {
         'table_data' => $tableData,
         'latest_logs' => $latestLogs,
         'total_count' => SensorData::where('incubator_code', $incubatorCode)->count()
-    ]);
+        ])->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+          ->header('Pragma', 'no-cache')
+          ->header('Expires', '0');
 });
 
 /*
