@@ -17,7 +17,7 @@
                 <div>
                     <h3 class="text-lg md:text-xl font-semibold text-black dark:text-white mb-2 transition-colors">Suhu Optimal (Temperatur)</h3>
                     <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-sm md:text-base transition-colors">
-                        Suhu adalah faktor paling krusial dalam keberhasilan penetasan. Suhu yang ideal untuk menetaskan telur ayam adalah berkisar antara <span class="text-orange-600 dark:text-orange-400 font-medium">37.5°C hingga 38.0°C</span>. Fluktuasi suhu yang drastis dapat menyebabkan embrio mati atau lahir cacat. Sistem cerdas kami menjamin suhu akan selalu terjaga ketat di dalam rentang tersebut.
+                        Suhu adalah faktor paling krusial dalam keberhasilan penetasan. Suhu yang ideal untuk menetaskan telur ayam adalah berkisar antara <span class="text-orange-600 dark:text-orange-400 font-medium">37.5°C hingga 38.5°C</span>. Fluktuasi suhu yang drastis dapat menyebabkan embrio mati atau lahir cacat. Sistem cerdas kami menjamin suhu akan selalu terjaga ketat di dalam rentang tersebut.
                     </p>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                 <div>
                     <h3 class="text-lg md:text-xl font-semibold text-black dark:text-white mb-2 transition-colors">Kelembaban Udara (Humidity)</h3>
                     <p class="text-slate-600 dark:text-slate-400 leading-relaxed text-sm md:text-base transition-colors">
-                        Kelembaban mempengaruhi tingkat penguapan air dari dalam kantong udara telur. Pada 18 hari pertama, kelembaban ideal adalah <span class="text-blue-600 dark:text-blue-400 font-medium">55% - 60%</span>. Pada 3 hari terakhir (masa penetasan / hatching phase), kelembaban harus dinaikkan menjadi <span class="text-blue-600 dark:text-blue-400 font-medium">65% - 70%</span> agar cangkang menjadi lebih rapuh dan anak ayam mudah keluar.
+                        Kelembaban mempengaruhi tingkat penguapan air dari dalam kantong udara telur. Pada 18 hari pertama, kelembaban ideal adalah <span class="text-blue-600 dark:text-blue-400 font-medium">50% - 60%</span>. Pada 3 hari terakhir (masa penetasan / hatching phase), kelembaban harus dinaikkan menjadi <span class="text-blue-600 dark:text-blue-400 font-medium">60% - 70%</span> agar cangkang menjadi lebih rapuh dan anak ayam mudah keluar.
                     </p>
                 </div>
             </div>
