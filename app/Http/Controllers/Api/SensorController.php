@@ -80,6 +80,6 @@ class SensorController extends Controller
             $query->where('incubator_code', strtoupper(trim((string) $request->incubator_code)));
         }
 
-        return response()->json($query->latest()->first());
+        return response()->json($query->latest('id')->first());
     }
 }

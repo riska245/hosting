@@ -239,8 +239,8 @@ Route::get('/dashboard-detail', function () {
     }
 
     $incubatorCode = strtoupper(trim((string) Session::get('incubator_code')));
-    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
-    $sensorHistory = SensorData::where('incubator_code', $incubatorCode)->latest()->paginate(10)->appends(request()->query());
+    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest('id')->first();
+    $sensorHistory = SensorData::where('incubator_code', $incubatorCode)->latest('id')->paginate(10)->appends(request()->query());
     $sensorCount = $sensorHistory->total();
 
     return view('pages.user.dashboard', compact('latestSensor', 'sensorHistory', 'sensorCount'));
@@ -252,7 +252,7 @@ Route::get('/dashboard-detail/realtime-data', function () {
     }
 
     $incubatorCode = strtoupper(trim((string) Session::get('incubator_code')));
-    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
+    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest('id')->first();
     
     if (!$latestSensor) {
         return response()->json(['has_data' => false]);
@@ -260,7 +260,7 @@ Route::get('/dashboard-detail/realtime-data', function () {
 
     // Latest 10 for chart (in chronological order)
     $chartData = SensorData::where('incubator_code', $incubatorCode)
-        ->latest()
+        ->latest('id')
         ->limit(10)
         ->get()
         ->reverse()
@@ -275,7 +275,7 @@ Route::get('/dashboard-detail/realtime-data', function () {
 
     // Latest 10 for table
     $tableData = SensorData::where('incubator_code', $incubatorCode)
-        ->latest()
+        ->latest('id')
         ->limit(10)
         ->get()
         ->map(function ($item, $index) {
@@ -312,7 +312,7 @@ Route::get('/dashboard-detail/realtime-data', function () {
 
     // Latest logs (latest 4)
     $latestLogs = SensorData::where('incubator_code', $incubatorCode)
-        ->latest()
+        ->latest('id')
         ->limit(4)
         ->get()
         ->map(function ($log) {
@@ -463,7 +463,7 @@ Route::get('/admin-dashboard', function () {
         ->values();
 
     $latestSensors = SensorData::whereIn('incubator_code', $incubatorCodes)
-        ->latest()
+        ->latest('id')
         ->get()
         ->unique('incubator_code')
         ->keyBy('incubator_code');
