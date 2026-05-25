@@ -1,6 +1,20 @@
 @extends('layouts.main')
 
 @section('content')
+@if(session('success'))
+    <div class="mb-6 bg-emerald-100 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20 text-emerald-800 dark:text-emerald-400 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+        <svg class="w-5 h-5 shrink-0 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span>{{ session('success') }}</span>
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="mb-6 bg-red-100 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 text-red-800 dark:text-red-400 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+        <svg class="w-5 h-5 shrink-0 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <span>{{ session('error') }}</span>
+    </div>
+@endif
+
 <!-- Admin Header -->
 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-4 sm:gap-6 mb-6 sm:mb-8 px-1 sm:px-2 md:px-0 mt-2 sm:mt-4">
     <div>
@@ -109,7 +123,8 @@
                         <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Pemutaran</th>
                         <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Update Sensor</th>
                         <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Login</th>
-                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider rounded-r-xl">Login Terakhir</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Login Terakhir</th>
+                        <th class="text-center py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider rounded-r-xl">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
@@ -185,10 +200,20 @@
                                 -
                             @endif
                         </td>
+                        <td class="py-3.5 px-4 text-sm text-center">
+                            <form action="{{ url('/admin/delete-user/' . $user->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user {{ $user->username }} secara permanen?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-red-100 hover:bg-red-200 dark:bg-red-500/10 dark:hover:bg-red-500/20 text-red-600 dark:text-red-400 transition-all active:scale-95">
+                                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    Hapus
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="10" class="py-8 text-center text-sm text-slate-400 dark:text-slate-500">Belum ada pengguna yang terdaftar.</td>
+                        <td colspan="11" class="py-8 text-center text-sm text-slate-400 dark:text-slate-500">Belum ada pengguna yang terdaftar.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -286,7 +311,7 @@
                 </div>
 
                 <!-- Navigation buttons -->
-                <nav class="flex items-center gap-1.5" aria-label="Pagination Navigasi">
+                <nav class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5" aria-label="Pagination Navigasi">
                     <!-- Previous Button -->
                     @if($userLogins->onFirstPage())
                         <span class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl cursor-not-allowed select-none">
@@ -337,6 +362,181 @@
                     <!-- Next Button -->
                     @if($userLogins->hasMorePages())
                         <a href="{{ $userLogins->nextPageUrl() }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 active:scale-[0.97]">
+                            Berikutnya
+                            <svg class="w-4 h-4 ml-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    @else
+                        <span class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl cursor-not-allowed select-none">
+                            Berikutnya
+                            <svg class="w-4 h-4 ml-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </span>
+                    @endif
+                </nav>
+            </div>
+        @endif
+    </div>
+</div>
+
+<!-- Riwayat Aktivitas Admin -->
+<div class="px-1 sm:px-2 md:px-0 mb-6 sm:mb-8">
+    <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-4 sm:p-6 transition-all duration-300">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div>
+                <h3 class="font-semibold text-black dark:text-white transition-colors flex items-center gap-2">
+                    <svg class="w-5 h-5 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    Riwayat Aktivitas Admin
+                </h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Catatan riwayat tindakan yang dilakukan oleh admin</p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                {{ $adminActivities instanceof \Illuminate\Pagination\LengthAwarePaginator ? $adminActivities->total() : $adminActivities->count() }} catatan
+            </span>
+        </div>
+
+        <div class="overflow-x-auto -mx-4 sm:-mx-6 px-4 sm:px-6 custom-scrollbar">
+            <table class="w-full min-w-[720px]">
+                <thead>
+                    <tr class="border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider rounded-l-xl">No</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Admin</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Aktivitas</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Detail</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Waktu</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">IP Address</th>
+                        <th class="text-left py-3 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider rounded-r-xl">Device</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 dark:divide-slate-800/60">
+                    @forelse($adminActivities as $index => $act)
+                    <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                        <td class="py-3.5 px-4 text-sm text-slate-500 dark:text-slate-400 font-mono">
+                            {{ $adminActivities instanceof \Illuminate\Pagination\LengthAwarePaginator ? ($adminActivities->currentPage() - 1) * $adminActivities->perPage() + $index + 1 : $index + 1 }}
+                        </td>
+                        <td class="py-3.5 px-4">
+                            <span class="text-sm font-semibold text-black dark:text-white">{{ $act->username }}</span>
+                        </td>
+                        <td class="py-3.5 px-4">
+                            @php
+                                $badgeClass = 'bg-slate-100 dark:bg-slate-500/15 text-slate-700 dark:text-slate-300';
+                                $actLabel = $act->activity;
+                                if ($act->activity === 'login') {
+                                    $badgeClass = 'bg-blue-100 dark:bg-blue-500/15 text-blue-700 dark:text-blue-300';
+                                    $actLabel = '🔑 Login';
+                                } elseif ($act->activity === 'logout') {
+                                    $badgeClass = 'bg-slate-100 dark:bg-slate-500/15 text-slate-700 dark:text-slate-300';
+                                    $actLabel = '🚪 Logout';
+                                } elseif ($act->activity === 'delete_user') {
+                                    $badgeClass = 'bg-red-100 dark:bg-red-500/15 text-red-700 dark:text-red-300';
+                                    $actLabel = '🗑️ Hapus User';
+                                }
+                            @endphp
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold {{ $badgeClass }}">
+                                {{ $actLabel }}
+                            </span>
+                        </td>
+                        <td class="py-3.5 px-4 text-sm text-slate-600 dark:text-slate-300">
+                            {{ $act->description }}
+                        </td>
+                        <td class="py-3.5 px-4">
+                            @if($act->created_at)
+                            <div class="text-sm font-medium text-black dark:text-white">{{ \Carbon\Carbon::parse($act->created_at)->format('d M Y') }}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">{{ \Carbon\Carbon::parse($act->created_at)->format('H:i:s') }} WIB</div>
+                            @else
+                            <span class="text-sm text-slate-400">-</span>
+                            @endif
+                        </td>
+                        <td class="py-3.5 px-4">
+                            <span class="text-xs font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">{{ $act->ip_address ?? '-' }}</span>
+                        </td>
+                        <td class="py-3.5 px-4">
+                            @php
+                                $actUa = $act->user_agent ?? '';
+                                if (str_contains($actUa, 'Mobile')) $actDevice = '📱 Mobile';
+                                elseif (str_contains($actUa, 'Windows')) $actDevice = '💻 Windows';
+                                elseif (str_contains($actUa, 'Mac')) $actDevice = '🖥️ Mac';
+                                elseif (str_contains($actUa, 'Linux')) $actDevice = '🐧 Linux';
+                                else $actDevice = '🌐 Unknown';
+                            @endphp
+                            <span class="text-xs text-slate-600 dark:text-slate-400">{{ $actDevice }}</span>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-sm text-slate-400 dark:text-slate-500">
+                            <div class="flex flex-col items-center gap-2">
+                                <svg class="w-10 h-10 text-slate-300 dark:text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                                Belum ada riwayat aktivitas admin.
+                            </div>
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        @if($adminActivities instanceof \Illuminate\Pagination\LengthAwarePaginator && $adminActivities->hasPages())
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <!-- Info text -->
+                <div class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium text-center sm:text-left">
+                    Menampilkan <span class="font-semibold text-slate-800 dark:text-slate-200">{{ $adminActivities->firstItem() }}</span> 
+                    sampai <span class="font-semibold text-slate-800 dark:text-slate-200">{{ $adminActivities->lastItem() }}</span> 
+                    dari <span class="font-semibold text-slate-800 dark:text-slate-200">{{ $adminActivities->total() }}</span> catatan aktivitas
+                </div>
+
+                <!-- Navigation buttons -->
+                <nav class="flex flex-wrap items-center justify-center sm:justify-start gap-1.5" aria-label="Pagination Navigasi Admin">
+                    <!-- Previous Button -->
+                    @if($adminActivities->onFirstPage())
+                        <span class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-400 dark:text-slate-600 bg-slate-50 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-xl cursor-not-allowed select-none">
+                            <svg class="w-4 h-4 mr-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            Sebelumnya
+                        </span>
+                    @else
+                        <a href="{{ $adminActivities->previousPageUrl() }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 active:scale-[0.97]">
+                            <svg class="w-4 h-4 mr-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                            Sebelumnya
+                        </a>
+                    @endif
+
+                    <!-- Page Number Links -->
+                    @php
+                        $actCurrentPage = $adminActivities->currentPage();
+                        $actLastPage = $adminActivities->lastPage();
+                        $actStartPage = max(1, $actCurrentPage - 2);
+                        $actEndPage = min($actLastPage, $actCurrentPage + 2);
+                    @endphp
+
+                    @if($actStartPage > 1)
+                        <a href="{{ $adminActivities->url(1) }}" class="inline-flex items-center justify-center w-8 h-8 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 active:scale-[0.95]">1</a>
+                        @if($actStartPage > 2)
+                            <span class="px-1 text-xs text-slate-400 dark:text-slate-600 select-none">...</span>
+                        @endif
+                    @endif
+
+                    @for($page = $actStartPage; $page <= $actEndPage; $page++)
+                        @if($page == $actCurrentPage)
+                            <span class="inline-flex items-center justify-center w-8 h-8 text-xs font-bold text-white bg-blue-600 rounded-xl shadow-[0_4px_12px_rgba(37,99,235,0.25)] border border-blue-600 select-none">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $adminActivities->url($page) }}" class="inline-flex items-center justify-center w-8 h-8 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all duration-200 active:scale-[0.95]">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endfor
+
+                    @if($actEndPage < $actLastPage)
+                        @if($actEndPage < $actLastPage - 1)
+                            <span class="px-1 text-xs text-slate-400 dark:text-slate-600 select-none">...</span>
+                        @endif
+                        <a href="{{ $adminActivities->url($actLastPage) }}" class="inline-flex items-center justify-center w-8 h-8 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-200 active:scale-[0.95]">{{ $actLastPage }}</a>
+                    @endif
+
+                    <!-- Next Button -->
+                    @if($adminActivities->hasMorePages())
+                        <a href="{{ $adminActivities->nextPageUrl() }}" class="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 active:scale-[0.97]">
                             Berikutnya
                             <svg class="w-4 h-4 ml-1 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                         </a>

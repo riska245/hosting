@@ -3,7 +3,7 @@
 @endphp
 
 <header class="fixed top-0 left-0 right-0 z-50 flex justify-center pt-3 sm:pt-4 px-3 sm:px-4 pointer-events-none">
-    <div class="app-navbar pointer-events-auto inline-flex items-center max-w-full border rounded-2xl lg:rounded-full transition-colors duration-300 overflow-visible backdrop-blur-xl">
+    <div class="app-navbar pointer-events-auto flex flex-col w-full max-w-full lg:w-auto lg:inline-flex lg:flex-row items-stretch lg:items-center border rounded-2xl lg:rounded-full transition-colors duration-300 overflow-visible backdrop-blur-xl">
         
         <div class="flex items-center justify-between gap-4 px-4 py-2.5 whitespace-nowrap">
             <!-- Left: Logo & Nav -->
@@ -125,6 +125,27 @@
                             </div>
                         </div>
 
+                        <!-- Menu Tambahan -->
+                        <div class="border-t border-gray-200 dark:border-gray-700 py-1.5 bg-slate-50/50 dark:bg-slate-800/20">
+                            @if(Session::get('role') === 'user')
+                            <a
+                                href="/dashboard-detail"
+                                class="flex items-center gap-2 w-full px-5 py-2.5 text-left text-sm font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-colors"
+                            >
+                                <svg class="w-4 h-4 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                                Kembali ke Dashboard Utama
+                            </a>
+                            @elseif(Session::get('role') === 'admin')
+                            <a
+                                href="/admin-dashboard"
+                                class="flex items-center gap-2 w-full px-5 py-2.5 text-left text-sm font-semibold text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-500/10 transition-colors"
+                            >
+                                <svg class="w-4 h-4 text-purple-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                Kembali ke Dashboard Admin
+                            </a>
+                            @endif
+                        </div>
+
                         <!-- Logout -->
                         <form method="POST" action="/logout" class="border-t border-gray-200 dark:border-gray-700">
                             @csrf
@@ -209,6 +230,43 @@
                 
                 <div class="pt-3 px-1">
                     @if(Session::get('login'))
+                    <!-- Profil Info di Mobile Menu -->
+                    <div class="px-4 py-4.5 mb-3 rounded-2xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200/60 dark:border-slate-700/60 shadow-inner">
+                        <div class="flex flex-col gap-1 text-sm mb-3">
+                            <span class="text-xs text-slate-400 dark:text-slate-500 font-semibold uppercase tracking-wider">Profil Akun</span>
+                            <div class="mt-1">
+                                <p class="font-bold text-black dark:text-white text-base">{{ Session::get('username') }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 font-mono mt-0.5">{{ Session::get('email') }}</p>
+                                <div class="mt-2.5">
+                                    <span class="text-[10px] inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 font-bold rounded-full border border-blue-200/50 dark:border-blue-500/20 capitalize">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                                        Role: {{ Session::get('role') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="border-t border-slate-200/60 dark:border-slate-700/50 mt-3 pt-3 flex flex-col gap-2">
+                            @if(Session::get('role') === 'user')
+                            <a
+                                href="/dashboard-detail"
+                                class="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl active:scale-[0.98] transition-all shadow-sm shadow-blue-500/20 text-center"
+                            >
+                                <svg class="w-4 h-4 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                                Kembali ke Dashboard Utama
+                            </a>
+                            @elseif(Session::get('role') === 'admin')
+                            <a
+                                href="/admin-dashboard"
+                                class="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-bold text-white bg-purple-600 hover:bg-purple-700 rounded-xl active:scale-[0.98] transition-all shadow-sm shadow-purple-500/20 text-center"
+                            >
+                                <svg class="w-4 h-4 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                Kembali ke Dashboard Admin
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+
                     <div class="flex justify-center mt-3">
                         <form method="POST" action="/logout" class="w-full">
                             @csrf

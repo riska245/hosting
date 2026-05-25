@@ -116,7 +116,7 @@ Route::post('/register', function (Request $request) {
     $data = $request->validate([
         'username' => 'required|string|max:255|unique:users,username',
         'email' => 'required|email|max:255|unique:users,email',
-        'incubator_code' => 'required|string|max:255|unique:users,incubator_code',
+        'incubator_code' => ['required', 'string', 'max:255', 'unique:users,incubator_code', 'regex:/^INC-\d+X$/'],
         'password' => 'required|string|min:6',
     ], [
         'username.required' => 'Nama / Username wajib diisi.',
@@ -126,6 +126,7 @@ Route::post('/register', function (Request $request) {
         'email.unique' => 'Email sudah terdaftar.',
         'incubator_code.required' => 'Nomor Inkubator wajib diisi.',
         'incubator_code.unique' => 'Nomor Inkubator sudah terdaftar.',
+        'incubator_code.regex' => 'Format nomor inkubator harus "INC-(nomor_inkubator)X" (Contoh: INC-001X, INC harus huruf besar).',
         'password.required' => 'Password wajib diisi.',
         'password.min' => 'Password minimal terdiri dari 6 karakter.',
     ]);
@@ -211,6 +212,14 @@ Route::post('/admin', function (Request $request) {
         'updated_at' => now(),
     ]);
 
+    \App\Models\AdminActivity::create([
+        'username' => $admin->username,
+        'activity' => 'login',
+        'description' => 'Admin berhasil login',
+        'ip_address' => $request->ip(),
+        'user_agent' => $request->userAgent(),
+    ]);
+
     return redirect('/admin-dashboard');
 });
 
@@ -231,10 +240,198 @@ Route::get('/dashboard-detail', function () {
 
     $incubatorCode = Session::get('incubator_code');
     $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
-    $sensorHistory = SensorData::where('incubator_code', $incubatorCode)->latest()->limit(10)->get();
-    $sensorCount = SensorData::where('incubator_code', $incubatorCode)->count();
+    $sensorHistory = SensorData::where('incubator_code', $incubatorCode)->latest()->paginate(10)->appends(request()->query());
+    $sensorCount = $sensorHistory->total();
 
     return view('pages.user.dashboard', compact('latestSensor', 'sensorHistory', 'sensorCount'));
+});
+
+Route::get('/dashboard-detail/realtime-data', function () {
+    if (!Session::get('login') || Session::get('role') !== 'user') {
+        return response()->json(['error' => 'Unauthorized'], 401);
+    }
+
+    $incubatorCode = Session::get('incubator_code');
+    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
+    
+    if (!$latestSensor) {
+        return response()->json(['has_data' => false]);
+    }
+
+    // Latest 10 for chart (in chronological order)
+    $chartData = SensorData::where('incubator_code', $incubatorCode)
+        ->latest()
+        ->limit(10)
+        ->get()
+        ->reverse()
+        ->values()
+        ->map(function ($item) {
+            return [
+                'time' => $item->created_at->setTimezone('Asia/Jakarta')->format('H:i'),
+                'temp' => (float)$item->temperature,
+                'hum' => (float)$item->humidity
+            ];
+        });
+
+    // Latest 10 for table
+    $tableData = SensorData::where('incubator_code', $incubatorCode)
+        ->latest()
+        ->limit(10)
+        ->get()
+        ->map(function ($item, $index) {
+            $temp = (float)$item->temperature;
+            $hum = (float)$item->humidity;
+            
+            if ($temp > 38.5) {
+                $statusClass = 'bg-red-600';
+                $statusText = 'Terlalu Panas';
+            } elseif ($temp < 37.0) {
+                $statusClass = 'bg-red-600';
+                $statusText = 'Kurang Panas';
+            } elseif ($hum > 65.0) {
+                $statusClass = 'bg-blue-600';
+                $statusText = 'Terlalu Lembap';
+            } elseif ($hum < 50.0) {
+                $statusClass = 'bg-blue-600';
+                $statusText = 'Kurang Lembap';
+            } else {
+                $statusClass = 'bg-green-600';
+                $statusText = 'Optimal';
+            }
+
+            return [
+                'no' => $index + 1,
+                'date' => $item->created_at->setTimezone('Asia/Jakarta')->format('d M Y'),
+                'time' => $item->created_at->setTimezone('Asia/Jakarta')->format('H:i') . ' WIB',
+                'temp' => number_format($item->temperature, 2) . '°C',
+                'hum' => number_format($item->humidity, 1) . '%',
+                'status_class' => $statusClass,
+                'status_text' => $statusText
+            ];
+        });
+
+    // Latest logs (latest 4)
+    $latestLogs = SensorData::where('incubator_code', $incubatorCode)
+        ->latest()
+        ->limit(4)
+        ->get()
+        ->map(function ($log) {
+            $logTime = $log->created_at->setTimezone('Asia/Jakarta');
+            $timeFormatted = $logTime->isToday() 
+                ? 'Hari ini, ' . $logTime->format('H:i') . ' WIB' 
+                : ($logTime->isYesterday() ? 'Kemarin, ' . $logTime->format('H:i') . ' WIB' : $logTime->format('d M Y, H:i') . ' WIB');
+            
+            $temp = (float)$log->temperature;
+            $hum = (float)$log->humidity;
+            $turning = strtolower($log->turning_status);
+            $lamp = strtolower($log->lamp_status);
+
+            $icon = 'info';
+            $bg = 'bg-blue-50 dark:bg-blue-500/10';
+            $color = 'text-blue-600 dark:text-blue-400';
+            
+            if ($temp > 38.5) {
+                $icon = 'warning';
+                $bg = 'bg-orange-50 dark:bg-orange-500/10';
+                $color = 'text-orange-600 dark:text-orange-400';
+                $message = "Peringatan: Suhu terdeteksi terlalu tinggi ({$temp}°C)";
+            } elseif ($temp < 37.0) {
+                $icon = 'warning';
+                $bg = 'bg-red-50 dark:bg-red-500/10';
+                $color = 'text-red-600 dark:text-red-400';
+                $message = "Peringatan: Suhu terdeteksi terlalu rendah ({$temp}°C)";
+            } elseif (in_array($turning, ['berputar', 'rotating'], true)) {
+                $icon = 'spin';
+                $bg = 'bg-amber-50 dark:bg-amber-500/10';
+                $color = 'text-amber-600 dark:text-amber-400';
+                $message = "Rak telur sedang diputar otomatis";
+            } elseif (in_array($turning, ['selesai', 'completed', 'done', 'turned'], true)) {
+                $icon = 'check';
+                $bg = 'bg-green-50 dark:bg-green-500/10';
+                $color = 'text-green-600 dark:text-green-400';
+                $message = "Rak telur berhasil diputar";
+            } elseif ($lamp === 'menyala' || $lamp === 'on') {
+                $icon = 'lamp';
+                $bg = 'bg-orange-50 dark:bg-orange-500/10';
+                $color = 'text-orange-600 dark:text-orange-400';
+                $message = "Pemanas (Lampu) diaktifkan otomatis";
+            } elseif ($lamp === 'mati' || $lamp === 'off') {
+                $icon = 'lamp-off';
+                $bg = 'bg-slate-50 dark:bg-slate-500/10';
+                $color = 'text-slate-600 dark:text-slate-400';
+                $message = "Pemanas (Lampu) dinonaktifkan otomatis";
+            } elseif ($hum > 65.0) {
+                $icon = 'warning';
+                $bg = 'bg-blue-50 dark:bg-blue-500/10';
+                $color = 'text-blue-600 dark:text-blue-400';
+                $message = "Peringatan: Kelembapan terdeteksi terlalu tinggi ({$hum}%)";
+            } elseif ($hum < 50.0) {
+                $icon = 'warning';
+                $bg = 'bg-blue-50 dark:bg-blue-500/10';
+                $color = 'text-blue-600 dark:text-blue-400';
+                $message = "Peringatan: Kelembapan terdeteksi terlalu rendah ({$hum}%)";
+            } else {
+                $message = "Kondisi sistem stabil dan optimal.";
+            }
+
+            return [
+                'message' => $message,
+                'time' => $timeFormatted,
+                'icon' => $icon,
+                'bg' => $bg,
+                'color' => $color
+            ];
+        });
+
+    $isDeviceConnected = $latestSensor->created_at->greaterThanOrEqualTo(now()->subMinutes(5));
+    $tempDiff = (float)$latestSensor->temperature - 38.0;
+    $humDiff = (float)$latestSensor->humidity - 60.0;
+
+    // Egg turning calculations
+    $turningStatus = strtolower($latestSensor->turning_status);
+    $isRotating = in_array($turningStatus, ['berputar', 'rotating'], true);
+    $turnedAtFormatted = $latestSensor->turned_at 
+        ? \Carbon\Carbon::parse($latestSensor->turned_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') . ' WIB' 
+        : 'Belum ada data';
+        
+    $nextTurn = $latestSensor->next_turn_at ? \Carbon\Carbon::parse($latestSensor->next_turn_at) : null;
+    $diffInMinutes = $nextTurn ? now()->diffInMinutes($nextTurn, false) : 0;
+    if ($diffInMinutes > 0) {
+        $hours = floor($diffInMinutes / 60);
+        $mins = $diffInMinutes % 60;
+        $dueLabel = $hours > 0 ? "± {$hours} Jam {$mins} Menit lagi" : "± {$mins} Menit lagi";
+        $progressPct = max(0, min(100, 100 - ($diffInMinutes / 240) * 100));
+    } else {
+        $dueLabel = $nextTurn ? 'Jadwal pemutaran tiba' : 'Belum dijadwalkan';
+        $progressPct = 100;
+    }
+    $nextTurnTime = $nextTurn ? $nextTurn->setTimezone('Asia/Jakarta')->format('H:i') : '--:--';
+
+    return response()->json([
+        'has_data' => true,
+        'is_device_connected' => $isDeviceConnected,
+        'sync_time' => $latestSensor->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') . ' WIB',
+        'temperature' => number_format((float)$latestSensor->temperature, 1),
+        'temp_diff' => number_format(abs($tempDiff), 2),
+        'temp_diff_sign' => $tempDiff >= 0 ? 'up' : 'down',
+        'temp_diff_status' => abs($tempDiff) <= 0.5 ? 'normal' : 'danger',
+        'humidity' => number_format((float)$latestSensor->humidity, 1),
+        'hum_diff' => number_format(abs($humDiff), 1),
+        'hum_diff_sign' => $humDiff >= 0 ? 'up' : 'down',
+        'hum_diff_status' => abs($humDiff) <= 5 ? 'normal' : 'danger',
+        
+        'turned_at' => $turnedAtFormatted,
+        'turning_status' => $turningStatus,
+        'is_rotating' => $isRotating,
+        'next_turn_time' => $nextTurnTime,
+        'next_turn_due_label' => $dueLabel,
+        'next_turn_progress' => $progressPct,
+
+        'chart_data' => $chartData,
+        'table_data' => $tableData,
+        'latest_logs' => $latestLogs,
+        'total_count' => SensorData::where('incubator_code', $incubatorCode)->count()
+    ]);
 });
 
 /*
@@ -287,6 +484,7 @@ Route::get('/admin-dashboard', function () {
         $nextTurnAt = $sensor?->next_turn_at;
 
         return (object) [
+            'id' => $user->id,
             'username' => $user->username,
             'email' => $user->email,
             'incubator_code' => $user->incubator_code,
@@ -307,7 +505,12 @@ Route::get('/admin-dashboard', function () {
     $userLogins = DB::table('login_users')
         ->where('role', 'user')
         ->orderBy('login_at', 'desc')
-        ->paginate(10);
+        ->paginate(10, ['*'], 'user_page')
+        ->appends(request()->query());
+
+    $adminActivities = \App\Models\AdminActivity::orderBy('created_at', 'desc')
+        ->paginate(10, ['*'], 'admin_page')
+        ->appends(request()->query());
 
     $totalUsers = $registeredUsers->count();
 
@@ -326,6 +529,7 @@ Route::get('/admin-dashboard', function () {
 
     return view('pages.admin.dashboard', compact(
         'userLogins',
+        'adminActivities',
         'totalUsers',
         'todayLogins',
         'totalIncubators',
@@ -340,7 +544,44 @@ Route::get('/admin-dashboard', function () {
 |--------------------------------------------------------------------------
 */
 
-Route::post('/logout', function () {
+Route::delete('/admin/delete-user/{id}', function (Request $request, $id) {
+    if (!Session::get('login') || Session::get('role') !== 'admin') {
+        return redirect('/admin');
+    }
+
+    $user = User::find($id);
+    if (!$user) {
+        return back()->with('error', 'User tidak ditemukan.');
+    }
+
+    $username = $user->username;
+    $incubator = $user->incubator_code;
+
+    // Log aktivitas sebelum dihapus agar data username & incubator masih valid
+    \App\Models\AdminActivity::create([
+        'username' => Session::get('username'),
+        'activity' => 'delete_user',
+        'description' => "Menghapus user: {$username} (Inkubator: {$incubator})",
+        'ip_address' => $request->ip(),
+        'user_agent' => $request->userAgent(),
+    ]);
+
+    $user->delete();
+
+    return back()->with('success', "User {$username} berhasil dihapus.");
+});
+
+Route::post('/logout', function (Request $request) {
+    if (Session::get('role') === 'admin') {
+        \App\Models\AdminActivity::create([
+            'username' => Session::get('username'),
+            'activity' => 'logout',
+            'description' => 'Admin logout dari sistem',
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+    }
+
     Session::flush();
 
     return redirect('/');

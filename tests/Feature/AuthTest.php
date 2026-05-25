@@ -227,10 +227,65 @@ class AuthTest extends TestCase
             'role' => 'admin',
             'username' => 'admintest',
             'email' => 'admin@test.com',
-        ])->get('/admin-dashboard?page=2');
+        ])->get('/admin-dashboard?user_page=2');
 
         $responsePage2->assertStatus(200);
+        // Page 2 shows items 11-15, which has the serial number "11" for item #11
         $responsePage2->assertSee('11');
+    }
+
+    /** @test */
+    public function users_cannot_register_with_invalid_incubator_code()
+    {
+        $response = $this->post('/register', [
+            'username' => 'newuser2',
+            'email' => 'newuser2@test.com',
+            'incubator_code' => 'inc-100x', // lowercase, should fail regex
+            'password' => 'password123',
+        ]);
+
+        $response->assertSessionHasErrors(['incubator_code']);
+        $this->assertDatabaseMissing('users', ['username' => 'newuser2']);
+    }
+
+    /** @test */
+    public function admin_can_delete_user_and_it_is_logged()
+    {
+        $admin = User::create([
+            'name' => 'Admin Test',
+            'username' => 'admintest',
+            'email' => 'admin@test.com',
+            'password' => Hash::make('admin123'),
+            'role' => 'admin',
+        ]);
+
+        $user = User::create([
+            'name' => 'To Be Deleted',
+            'username' => 'tobedeleted',
+            'email' => 'deleted@test.com',
+            'password' => Hash::make('password123'),
+            'role' => 'user',
+            'incubator_code' => 'INC-888X',
+        ]);
+
+        $this->assertDatabaseHas('users', ['username' => 'tobedeleted']);
+
+        $response = $this->withSession([
+            'login' => true,
+            'user_id' => $admin->id,
+            'role' => 'admin',
+            'username' => 'admintest',
+            'email' => 'admin@test.com',
+        ])->delete('/admin/delete-user/' . $user->id);
+
+        $response->assertRedirect();
+        $this->assertDatabaseMissing('users', ['username' => 'tobedeleted']);
+
+        $this->assertDatabaseHas('admin_activities', [
+            'username' => 'admintest',
+            'activity' => 'delete_user',
+            'description' => 'Menghapus user: tobedeleted (Inkubator: INC-888X)',
+        ]);
     }
 }
 

@@ -177,7 +177,7 @@
                 </h2>
 
                 <p class="text-slate-600 dark:text-slate-400 transition-colors">
-                    Developer dan perancang sistem inkubator telur otomatis
+                    Pengadaan dan perancang produk sistem inkubator 
                 </p>
             </div>
 
@@ -202,12 +202,12 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        laporan dan memoles maket
                     </p>
 
                     <div class="social-container">
                         <!-- TikTok -->
-                        <a href="https://tiktok.com/@"
+                        <a href="https://tiktok.com/@nmnay44"
                            target="_blank"
                            class="social-btn social-tiktok"
                            title="TikTok">
@@ -217,7 +217,7 @@
                         </a>
 
                         <!-- Instagram -->
-                        <a href="https://instagram.com/"
+                        <a href="https://instagram.com/dnayanaz"
                            target="_blank"
                            class="social-btn social-instagram"
                            title="Instagram">
@@ -246,7 +246,7 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        Pembuatan maket dan perakitan alat
                     </p>
 
                     <div class="social-container">
@@ -290,7 +290,7 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        Pengadaan alat dan laporan 
                     </p>
 
                     <div class="social-container">
@@ -334,7 +334,7 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        Projek manager dan perakitan alat
                     </p>
 
                     <div class="social-container">
@@ -378,12 +378,12 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        IoT dan perakitan alat 
                     </p>
 
                     <div class="social-container">
                         <!-- TikTok -->
-                        <a href="https://tiktok.com/@"
+                        <a href="https://tiktok.com/@sweetchoco02_"
                            target="_blank"
                            class="social-btn social-tiktok"
                            title="TikTok">
@@ -393,7 +393,7 @@
                         </a>
 
                         <!-- Instagram -->
-                        <a href="https://instagram.com/"
+                        <a href="https://instagram.com/saidaaa.k"
                            target="_blank"
                            class="social-btn social-instagram"
                            title="Instagram">
@@ -422,12 +422,12 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        Pengadaan alat dan laporan
                     </p>
 
                     <div class="social-container">
                         <!-- TikTok -->
-                        <a href="https://tiktok.com/@"
+                        <a href="https://tiktok.com/@pepe_sipepe"
                            target="_blank"
                            class="social-btn social-tiktok"
                            title="TikTok">
@@ -437,7 +437,7 @@
                         </a>
 
                         <!-- Instagram -->
-                        <a href="https://instagram.com/"
+                        <a href="https://instagram.com/phutraseves"
                            target="_blank"
                            class="social-btn social-instagram"
                            title="Instagram">
@@ -487,12 +487,12 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        Web dan promosi
                     </p>
 
                     <div class="social-container">
                         <!-- TikTok -->
-                        <a href="https://instagram.com/moe_phi
+                        <a href="https://instagram.com/moe_phi"
 "
                            target="_blank"
                            class="social-btn social-instagram"
@@ -532,12 +532,12 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        Bendahara dan web
                     </p>
 
                     <div class="social-container">
                         <!-- TikTok -->
-                        <a href="https://tiktok.com/@"
+                        <a href="https://tiktok.com/@livlouf"
                            target="_blank"
                            class="social-btn social-tiktok"
                            title="TikTok">
@@ -547,7 +547,7 @@
                         </a>
 
                         <!-- Instagram -->
-                        <a href="https://instagram.com/"
+                        <a href="https://instagram.com/oliviaaa.r_"
                            target="_blank"
                            class="social-btn social-instagram"
                            title="Instagram">
@@ -576,7 +576,7 @@
                     </p>
 
                     <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Berfokus pada pengembangan website, dashboard monitoring, dan integrasi IoT untuk sistem inkubator pintar.
+                        Web dan promosi
                     </p>
 
                     <div class="social-container">
