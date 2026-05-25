@@ -25,7 +25,7 @@
                 ADMIN
             </span>
         </div>
-        <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-base">Selamat datang, <span class="font-semibold text-slate-800 dark:text-slate-200">{{ Session::get('username') }}</span> | Terakhir diakses: <span class="font-medium text-slate-800 dark:text-slate-300">{{ now()->format('d M Y, H:i') }} WIB</span></p>
+        <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-base">Selamat datang, <span class="font-semibold text-slate-800 dark:text-slate-200">{{ Session::get('username') }}</span> | Terakhir diakses: <span class="font-medium text-slate-800 dark:text-slate-300">{{ now()->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</span></p>
     </div>
 </div>
 
@@ -169,7 +169,7 @@
                                         {{ $user->turning_is_due ? 'Perlu diputar' : ucfirst($user->turning_status) }}
                                     </span>
                                     <p class="text-[11px] text-slate-500 dark:text-slate-400">
-                                        Berikutnya: {{ $user->next_turn_at->format('H:i') }} WIB
+                                        Berikutnya: {{ $user->next_turn_at->setTimezone('Asia/Jakarta')->format('H:i') }} WIB
                                     </p>
                                 </div>
                             @else
@@ -183,7 +183,7 @@
                                         {{ $user->sensor_is_fresh ? 'Terbaru 3 menit' : 'Lebih dari 3 menit' }}
                                     </span>
                                     <p class="text-[11px] text-slate-500 dark:text-slate-400">
-                                        {{ $user->sensor_updated_at->format('d M Y, H:i') }} WIB
+                                        {{ $user->sensor_updated_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
                                     </p>
                                 </div>
                             @else
@@ -195,7 +195,7 @@
                         </td>
                         <td class="py-3.5 px-4 text-sm text-slate-600 dark:text-slate-300">
                             @if($user->last_login)
-                                {{ \Carbon\Carbon::parse($user->last_login)->format('d M Y, H:i') }}
+                                {{ \Carbon\Carbon::parse($user->last_login)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
                             @else
                                 -
                             @endif
@@ -265,8 +265,8 @@
                         </td>
                         <td class="py-3.5 px-4">
                             @if($log->login_at)
-                            <div class="text-sm font-medium text-black dark:text-white">{{ \Carbon\Carbon::parse($log->login_at)->format('d M Y') }}</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">{{ \Carbon\Carbon::parse($log->login_at)->format('H:i:s') }} WIB</div>
+                            <div class="text-sm font-medium text-black dark:text-white">{{ \Carbon\Carbon::parse($log->login_at)->setTimezone('Asia/Jakarta')->format('d M Y') }}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">{{ \Carbon\Carbon::parse($log->login_at)->setTimezone('Asia/Jakarta')->format('H:i:s') }} WIB</div>
                             @else
                             <span class="text-sm text-slate-400">-</span>
                             @endif
@@ -440,8 +440,8 @@
                         </td>
                         <td class="py-3.5 px-4">
                             @if($act->created_at)
-                            <div class="text-sm font-medium text-black dark:text-white">{{ \Carbon\Carbon::parse($act->created_at)->format('d M Y') }}</div>
-                            <div class="text-xs text-slate-500 dark:text-slate-400">{{ \Carbon\Carbon::parse($act->created_at)->format('H:i:s') }} WIB</div>
+                            <div class="text-sm font-medium text-black dark:text-white">{{ \Carbon\Carbon::parse($act->created_at)->setTimezone('Asia/Jakarta')->format('d M Y') }}</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400">{{ \Carbon\Carbon::parse($act->created_at)->setTimezone('Asia/Jakarta')->format('H:i:s') }} WIB</div>
                             @else
                             <span class="text-sm text-slate-400">-</span>
                             @endif

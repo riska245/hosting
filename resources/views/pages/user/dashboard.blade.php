@@ -11,7 +11,7 @@
                 ONLINE
             </span>
         </div>
-        <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-base">ID Perangkat: <span class="font-mono font-medium text-slate-800 dark:text-slate-300">{{ Session::get('incubator_code') ?? '-' }}</span> <span class="hidden sm:inline">|</span> <br class="sm:hidden">Terakhir sinkronisasi: <span id="last-sync-time" class="font-medium text-slate-800 dark:text-slate-300">{{ isset($latestSensor) && $latestSensor ? $latestSensor->created_at->format('d M Y, H:i') . ' WIB' : 'Belum ada data' }}</span></p>
+        <p class="text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-base">ID Perangkat: <span class="font-mono font-medium text-slate-800 dark:text-slate-300">{{ Session::get('incubator_code') ?? '-' }}</span> <span class="hidden sm:inline">|</span> <br class="sm:hidden">Terakhir sinkronisasi: <span id="last-sync-time" class="font-medium text-slate-800 dark:text-slate-300">{{ isset($latestSensor) && $latestSensor ? $latestSensor->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i') . ' WIB' : 'Belum ada data' }}</span></p>
     </div>
     
     <div class="flex items-center gap-2 sm:gap-3 w-full lg:w-auto">
