@@ -17,16 +17,8 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Admin Utama',
                 'username' => 'admin',
-                'email' => 'admin@gmail.com',
+                'email' => 'admin@inkubator.test',
                 'password' => '2026ceria',
-                'role' => 'admin',
-                'incubator_code' => null,
-            ],
-            [
-                'name' => 'Admin Kedua',
-                'username' => 'rae',
-                'email' => 'raeunyah@gmail.com',
-                'password' => 'adminimup',
                 'role' => 'admin',
                 'incubator_code' => null,
             ],
@@ -34,7 +26,7 @@ class DatabaseSeeder extends Seeder
 
         foreach ($accounts as $account) {
             User::updateOrCreate(
-                ['username' => $account['username']], // Menggunakan username sebagai pencarian unik agar tidak bentrok duplicate entry
+                ['username' => $account['username']],
                 [
                     'name' => $account['name'],
                     'email' => $account['email'],
