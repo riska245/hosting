@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Schema;
 
 /*
 |--------------------------------------------------------------------------
@@ -212,13 +213,15 @@ Route::post('/admin', function (Request $request) {
         'updated_at' => now(),
     ]);
 
-    \App\Models\AdminActivity::create([
-        'username' => $admin->username,
-        'activity' => 'login',
-        'description' => 'Admin berhasil login',
-        'ip_address' => $request->ip(),
-        'user_agent' => $request->userAgent(),
-    ]);
+    if (Schema::hasTable('admin_activities')) {
+        \App\Models\AdminActivity::create([
+            'username' => $admin->username,
+            'activity' => 'login',
+            'description' => 'Admin berhasil login',
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+    }
 
     return redirect('/admin-dashboard');
 });
