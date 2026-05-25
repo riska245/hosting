@@ -47,9 +47,9 @@
     <div class="lg:col-span-2 flex flex-col gap-6 md:gap-8">
         
         <!-- Top Metrics Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
-            <!-- Suhu Akurat Card -->
-            <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 relative overflow-hidden group hover:border-orange-300 dark:hover:border-orange-500/30 transition-all">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+            <!-- Suhu Aktual Card -->
+            <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 relative overflow-hidden group hover:border-orange-300 dark:hover:border-orange-500/30 transition-all shadow-sm">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-orange-50 dark:bg-orange-500/10 rounded-full blur-2xl"></div>
                 
                 <div class="flex justify-between items-start mb-4 relative z-10">
@@ -87,8 +87,29 @@
                 </div>
             </div>
 
-            <!-- Kelembaban Akurat Card -->
-            <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 relative overflow-hidden group hover:border-blue-300 dark:hover:border-blue-500/30 transition-all">
+            <!-- Rata-rata Suhu Card -->
+            <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 relative overflow-hidden group hover:border-amber-300 dark:hover:border-amber-500/30 transition-all shadow-sm">
+                <div class="absolute -right-6 -top-6 w-24 h-24 bg-amber-50 dark:bg-amber-500/10 rounded-full blur-2xl"></div>
+                <div class="flex justify-between items-start mb-4 relative z-10">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Rata-rata Suhu</p>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-black dark:text-white tracking-tight">{{ number_format($avgTemp, 1) }}<span class="text-xl sm:text-2xl text-slate-400">&deg;C</span></h2>
+                        </div>
+                    </div>
+                    <div class="p-2 bg-amber-100 dark:bg-amber-500/20 rounded-lg">
+                        <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="relative z-10 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <span>Statistik Keseluruhan</span>
+                </div>
+            </div>
+
+            <!-- Kelembaban Aktual Card -->
+            <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 relative overflow-hidden group hover:border-blue-300 dark:hover:border-blue-500/30 transition-all shadow-sm">
                 <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-50 dark:bg-blue-500/10 rounded-full blur-2xl"></div>
                 
                 <div class="flex justify-between items-start mb-4 relative z-10">
@@ -123,6 +144,28 @@
                             --
                         @endif
                     </span>
+                </div>
+            </div>
+
+            <!-- Rata-rata Kelembaban Card -->
+            <div class="bg-white dark:bg-slate-900/60 backdrop-blur-md border border-slate-200 dark:border-slate-800 rounded-2xl p-5 sm:p-6 relative overflow-hidden group hover:border-blue-300 dark:hover:border-blue-500/30 transition-all shadow-sm">
+                <div class="absolute -right-6 -top-6 w-24 h-24 bg-blue-50 dark:bg-blue-500/10 rounded-full blur-2xl"></div>
+                <div class="flex justify-between items-start mb-4 relative z-10">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Rata-rata Kelembaban</p>
+                        <div class="flex items-baseline gap-2 mt-1">
+                            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-black dark:text-white tracking-tight">{{ number_format($avgHum, 1) }}<span class="text-xl sm:text-2xl text-slate-400">%</span></h2>
+                        </div>
+                    </div>
+                    <div class="p-2 bg-blue-100 dark:bg-blue-500/20 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="relative z-10 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+                    <span>Statistik Keseluruhan</span>
                 </div>
             </div>
         </div>
@@ -388,15 +431,124 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
             <div>
                 <h3 class="font-semibold text-black dark:text-white transition-colors">Riwayat Data Sensor</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">10 pembacaan terakhir dari perangkat</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Daftar rekaman pembacaan sensor dari perangkat</p>
             </div>
             <div class="flex items-center gap-2">
                 <span class="inline-flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">
                     <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    Auto-refresh 30 detik
+                    Auto-refresh 4 detik
                 </span>
             </div>
         </div>
+
+        <!-- Filter Form -->
+        <form method="GET" action="{{ url('/dashboard-detail') }}" id="filter-form" class="mb-6 p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200 dark:border-slate-800/60 transition-all">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Date Filter -->
+                <div>
+                    <label for="date-filter" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Rentang Tanggal</label>
+                    <select name="date_filter" id="date-filter" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                        <option value="" {{ request('date_filter') == '' ? 'selected' : '' }}>Semua Waktu</option>
+                        <option value="today" {{ request('date_filter') == 'today' ? 'selected' : '' }}>Hari Ini</option>
+                        <option value="week" {{ request('date_filter') == 'week' ? 'selected' : '' }}>Minggu Ini</option>
+                        <option value="month" {{ request('date_filter') == 'month' ? 'selected' : '' }}>Bulan Ini</option>
+                        <option value="custom" {{ request('date_filter') == 'custom' ? 'selected' : '' }}>Rentang Kustom</option>
+                    </select>
+                </div>
+
+                <!-- Suhu (Kategori) -->
+                <div>
+                    <label for="temp-filter" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Suhu (&deg;C)</label>
+                    <select name="temp_filter" id="temp-filter" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                        <option value="" {{ request('temp_filter') == '' ? 'selected' : '' }}>Semua Suhu</option>
+                        <option value="36" {{ request('temp_filter') == '36' ? 'selected' : '' }}>Suhu 36&deg;C</option>
+                        <option value="37" {{ request('temp_filter') == '37' ? 'selected' : '' }}>Suhu 37&deg;C</option>
+                        <option value="38" {{ request('temp_filter') == '38' ? 'selected' : '' }}>Suhu 38&deg;C</option>
+                        <option value="39" {{ request('temp_filter') == '39' ? 'selected' : '' }}>Suhu 39&deg;C</option>
+                        <option value="custom" {{ request('temp_filter') == 'custom' ? 'selected' : '' }}>Rentang Kustom</option>
+                    </select>
+                </div>
+
+                <!-- Kelembapan (Kategori) -->
+                <div>
+                    <label for="hum-filter" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Kelembapan (%)</label>
+                    <select name="hum_filter" id="hum-filter" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                        <option value="" {{ request('hum_filter') == '' ? 'selected' : '' }}>Semua Kelembapan</option>
+                        <option value="40-50" {{ request('hum_filter') == '40-50' ? 'selected' : '' }}>40-50%</option>
+                        <option value="51-60" {{ request('hum_filter') == '51-60' ? 'selected' : '' }}>51-60%</option>
+                        <option value="61-70" {{ request('hum_filter') == '61-70' ? 'selected' : '' }}>61-70%</option>
+                        <option value="custom" {{ request('hum_filter') == 'custom' ? 'selected' : '' }}>Rentang Kustom</option>
+                    </select>
+                </div>
+
+                <!-- Kondisi -->
+                <div>
+                    <label for="status-filter" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Keterangan Kondisi</label>
+                    <select name="status_filter" id="status-filter" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                        <option value="" {{ request('status_filter') == '' ? 'selected' : '' }}>Semua Kondisi</option>
+                        <option value="optimal" {{ request('status_filter') == 'optimal' ? 'selected' : '' }}>Optimal</option>
+                        <option value="panas" {{ request('status_filter') == 'panas' ? 'selected' : '' }}>Terlalu Panas</option>
+                        <option value="dingin" {{ request('status_filter') == 'dingin' ? 'selected' : '' }}>Kurang Panas</option>
+                        <option value="lembap" {{ request('status_filter') == 'lembap' ? 'selected' : '' }}>Terlalu Lembap</option>
+                        <option value="kering" {{ request('status_filter') == 'kering' ? 'selected' : '' }}>Kurang Lembap</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Custom Date Inputs -->
+            <div id="custom-date-container" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 border-t border-slate-200/60 dark:border-slate-700/60 pt-4">
+                <div>
+                    <label for="start-date" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Tanggal Mulai</label>
+                    <input type="date" name="start_date" id="start-date" value="{{ request('start_date') }}" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                </div>
+                <div>
+                    <label for="end-date" class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Tanggal Selesai</label>
+                    <input type="date" name="end_date" id="end-date" value="{{ request('end_date') }}" class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                </div>
+            </div>
+
+            <!-- Custom Range Inputs (Temp & Hum) -->
+            <div id="custom-ranges-container" class="hidden grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 border-t border-slate-200/60 dark:border-slate-700/60 pt-4">
+                <div id="custom-temp-container" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Rentang Suhu Kustom (&deg;C)</label>
+                    <div class="flex gap-2">
+                        <input type="number" step="0.1" name="min_temp" id="min-temp" value="{{ request('min_temp') }}" placeholder="Min Suhu" class="w-1/2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                        <input type="number" step="0.1" name="max_temp" id="max-temp" value="{{ request('max_temp') }}" placeholder="Max Suhu" class="w-1/2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                    </div>
+                </div>
+                <div id="custom-hum-container" class="hidden">
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-400 mb-1.5 uppercase">Rentang Kelembapan Kustom (%)</label>
+                    <div class="flex gap-2">
+                        <input type="number" step="1" name="min_hum" id="min-hum" value="{{ request('min_hum') }}" placeholder="Min Kelembapan" class="w-1/2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                        <input type="number" step="1" name="max_hum" id="max-hum" value="{{ request('max_hum') }}" placeholder="Max Kelembapan" class="w-1/2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-800 dark:text-slate-200 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mt-4 pt-4 border-t border-slate-200/60 dark:border-slate-700/60">
+                <div class="flex gap-2">
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm active:scale-95 select-none">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" /></svg>
+                        Terapkan Filter
+                    </button>
+                    <a href="{{ url('/dashboard-detail') }}" class="px-4 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 active:scale-95 select-none">
+                        Reset
+                    </a>
+                </div>
+                
+                <div class="flex gap-2">
+                    <a href="{{ url('/dashboard-detail/export/pdf?' . http_build_query(request()->all())) }}" target="_blank" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm active:scale-95 select-none">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4" /></svg>
+                        Cetak PDF
+                    </a>
+                    <a href="{{ url('/dashboard-detail/export/excel?' . http_build_query(request()->all())) }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm active:scale-95 select-none">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        Export Excel
+                    </a>
+                </div>
+            </div>
+        </form>
 
         <div class="overflow-x-auto -mx-5 sm:-mx-6 px-5 sm:px-6">
             <table class="w-full min-w-[600px]">
@@ -577,9 +729,61 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Auto-open panel if page parameter is present in URL
+    // Date Filter Toggler
+    const dateFilterSelect = document.getElementById('date-filter');
+    const customDateContainer = document.getElementById('custom-date-container');
+    if (dateFilterSelect && customDateContainer) {
+        const toggleCustomDates = () => {
+            if (dateFilterSelect.value === 'custom') {
+                customDateContainer.classList.remove('hidden');
+            } else {
+                customDateContainer.classList.add('hidden');
+            }
+        };
+        dateFilterSelect.addEventListener('change', toggleCustomDates);
+        toggleCustomDates();
+    }
+
+    // Temperature & Humidity Category Custom Range Toggler
+    const tempFilterSelect = document.getElementById('temp-filter');
+    const humFilterSelect = document.getElementById('hum-filter');
+    const customRangesContainer = document.getElementById('custom-ranges-container');
+    const customTempContainer = document.getElementById('custom-temp-container');
+    const customHumContainer = document.getElementById('custom-hum-container');
+
+    if (tempFilterSelect && humFilterSelect && customRangesContainer && customTempContainer && customHumContainer) {
+        const toggleCustomRanges = () => {
+            const isTempCustom = tempFilterSelect.value === 'custom';
+            const isHumCustom = humFilterSelect.value === 'custom';
+
+            if (isTempCustom || isHumCustom) {
+                customRangesContainer.classList.remove('hidden');
+            } else {
+                customRangesContainer.classList.add('hidden');
+            }
+
+            if (isTempCustom) {
+                customTempContainer.classList.remove('hidden');
+            } else {
+                customTempContainer.classList.add('hidden');
+            }
+
+            if (isHumCustom) {
+                customHumContainer.classList.remove('hidden');
+            } else {
+                customHumContainer.classList.add('hidden');
+            }
+        };
+
+        tempFilterSelect.addEventListener('change', toggleCustomRanges);
+        humFilterSelect.addEventListener('change', toggleCustomRanges);
+        toggleCustomRanges();
+    }
+
+    // Auto-open panel if page or filter parameters are present in URL
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('page') && panel) {
+    const hasFilters = urlParams.has('page') || urlParams.has('date_filter') || urlParams.has('temp_filter') || urlParams.has('hum_filter') || urlParams.has('min_temp') || urlParams.has('max_temp') || urlParams.has('min_hum') || urlParams.has('max_hum') || urlParams.has('status_filter');
+    if (hasFilters && panel) {
         panel.classList.remove('hidden');
         if (text) text.textContent = 'Tutup Data';
         if (chevron) chevron.style.transform = 'rotate(180deg)';
@@ -660,9 +864,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function fetchRealtimeData() {
         const urlParams = new URLSearchParams(window.location.search);
         const currentPage = urlParams.get('page') || '1';
-        const realtimeUrl = `/dashboard-detail/realtime-data?t=${Date.now()}`;
 
-        fetch(realtimeUrl, { cache: 'no-store' })
+        // Pass current filter query parameters to realtime endpoint
+        const queryString = urlParams.toString();
+        const fetchUrl = `/dashboard-detail/realtime-data${queryString ? '?' + queryString + '&' : '?'}t=${Date.now()}`;
+
+        fetch(fetchUrl, { cache: 'no-store' })
             .then(response => response.json())
             .then(data => {
                 if (!data.has_data) return;

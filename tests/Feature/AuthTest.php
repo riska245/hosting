@@ -287,5 +287,67 @@ class AuthTest extends TestCase
             'description' => 'Menghapus user: tobedeleted (Inkubator: INC-888X)',
         ]);
     }
+
+    /** @test */
+    public function guests_cannot_access_export_routes()
+    {
+        $responsePdf = $this->get('/dashboard-detail/export/pdf');
+        $responsePdf->assertRedirect('/login');
+
+        $responseExcel = $this->get('/dashboard-detail/export/excel');
+        $responseExcel->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function authenticated_users_can_access_pdf_export_and_see_device_code()
+    {
+        $user = User::create([
+            'name' => 'Exporter User',
+            'username' => 'exporter_user',
+            'email' => 'exporter@test.com',
+            'password' => Hash::make('password123'),
+            'role' => 'user',
+            'incubator_code' => 'INC-123X',
+        ]);
+
+        $response = $this->withSession([
+            'login' => true,
+            'user_id' => $user->id,
+            'role' => 'user',
+            'username' => 'exporter_user',
+            'email' => 'exporter@test.com',
+            'incubator_code' => 'INC-123X',
+        ])->get('/dashboard-detail/export/pdf');
+
+        $response->assertStatus(200);
+        $response->assertSee('Laporan Riwayat Sensor');
+        $response->assertSee('INC-123X');
+    }
+
+    /** @test */
+    public function authenticated_users_can_download_excel_csv_export()
+    {
+        $user = User::create([
+            'name' => 'Exporter User 2',
+            'username' => 'exporter_user2',
+            'email' => 'exporter2@test.com',
+            'password' => Hash::make('password123'),
+            'role' => 'user',
+            'incubator_code' => 'INC-456X',
+        ]);
+
+        $response = $this->withSession([
+            'login' => true,
+            'user_id' => $user->id,
+            'role' => 'user',
+            'username' => 'exporter_user2',
+            'email' => 'exporter2@test.com',
+            'incubator_code' => 'INC-456X',
+        ])->get('/dashboard-detail/export/excel');
+
+        $response->assertStatus(200);
+        $this->assertStringContainsString('text/csv', $response->headers->get('Content-Type'));
+        $this->assertStringContainsString('riwayat_sensor_INC-456X_', $response->headers->get('Content-Disposition'));
+    }
 }
 

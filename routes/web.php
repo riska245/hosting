@@ -229,7 +229,83 @@ Route::post('/admin', function (Request $request) {
 |--------------------------------------------------------------------------
 */
 
-Route::get('/dashboard-detail', function () {
+if (!function_exists('applySensorFilters')) {
+    function applySensorFilters($query, Request $request) {
+        $dateFilter = $request->input('date_filter');
+        if ($dateFilter === 'today') {
+            $query->whereDate('created_at', \Carbon\Carbon::today());
+        } elseif ($dateFilter === 'week') {
+            $query->where('created_at', '>=', \Carbon\Carbon::now()->startOfWeek());
+        } elseif ($dateFilter === 'month') {
+            $query->where('created_at', '>=', \Carbon\Carbon::now()->startOfMonth());
+        } elseif ($dateFilter === 'custom') {
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            if ($startDate && $endDate) {
+                $query->whereBetween('created_at', [$startDate . ' 00:00:00', $endDate . ' 23:59:59']);
+            } elseif ($startDate) {
+                $query->where('created_at', '>=', $startDate . ' 00:00:00');
+            } elseif ($endDate) {
+                $query->where('created_at', '<=', $endDate . ' 23:59:59');
+            }
+        }
+
+        $tempFilter = $request->input('temp_filter');
+        if ($tempFilter === '36') {
+            $query->whereBetween('temperature', [36.0, 36.999]);
+        } elseif ($tempFilter === '37') {
+            $query->whereBetween('temperature', [37.0, 37.999]);
+        } elseif ($tempFilter === '38') {
+            $query->whereBetween('temperature', [38.0, 38.999]);
+        } elseif ($tempFilter === '39') {
+            $query->whereBetween('temperature', [39.0, 39.999]);
+        } elseif ($tempFilter === 'custom') {
+            if ($request->filled('min_temp')) {
+                $query->where('temperature', '>=', (float)$request->input('min_temp'));
+            }
+            if ($request->filled('max_temp')) {
+                $query->where('temperature', '<=', (float)$request->input('max_temp'));
+            }
+        }
+
+        $humFilter = $request->input('hum_filter');
+        if ($humFilter === '40-50') {
+            $query->whereBetween('humidity', [40.0, 50.0]);
+        } elseif ($humFilter === '51-60') {
+            $query->whereBetween('humidity', [51.0, 60.0]);
+        } elseif ($humFilter === '61-70') {
+            $query->whereBetween('humidity', [61.0, 70.0]);
+        } elseif ($humFilter === 'custom') {
+            if ($request->filled('min_hum')) {
+                $query->where('humidity', '>=', (float)$request->input('min_hum'));
+            }
+            if ($request->filled('max_hum')) {
+                $query->where('humidity', '<=', (float)$request->input('max_hum'));
+            }
+        }
+
+        $statusFilter = $request->input('status_filter');
+        if ($statusFilter) {
+            if ($statusFilter === 'optimal') {
+                $query->whereBetween('temperature', [37.0, 38.5])
+                      ->whereBetween('humidity', [50.0, 65.0]);
+            } elseif ($statusFilter === 'panas') {
+                $query->where('temperature', '>', 38.5);
+            } elseif ($statusFilter === 'dingin') {
+                $query->where('temperature', '<', 37.0);
+            } elseif ($statusFilter === 'lembap') {
+                $query->whereBetween('temperature', [37.0, 38.5])
+                      ->where('humidity', '>', 65.0);
+            } elseif ($statusFilter === 'kering') {
+                $query->whereBetween('temperature', [37.0, 38.5])
+                      ->where('humidity', '<', 50.0);
+            }
+        }
+        return $query;
+    }
+}
+
+Route::get('/dashboard-detail', function (Request $request) {
     if (!Session::get('login')) {
         return redirect('/login');
     }
@@ -238,21 +314,29 @@ Route::get('/dashboard-detail', function () {
         return redirect('/');
     }
 
-    $incubatorCode = strtoupper(trim((string) Session::get('incubator_code')));
-    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest('id')->first();
-    $sensorHistory = SensorData::where('incubator_code', $incubatorCode)->latest('id')->paginate(10)->appends(request()->query());
+    $incubatorCode = Session::get('incubator_code');
+    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
+    
+    $query = SensorData::where('incubator_code', $incubatorCode);
+    $query = applySensorFilters($query, $request);
+    
+    $sensorHistory = $query->latest()->paginate(10)->appends($request->query());
     $sensorCount = $sensorHistory->total();
 
-    return view('pages.user.dashboard', compact('latestSensor', 'sensorHistory', 'sensorCount'));
+    // Overall device statistics
+    $avgTemp = SensorData::where('incubator_code', $incubatorCode)->avg('temperature') ?? 0;
+    $avgHum = SensorData::where('incubator_code', $incubatorCode)->avg('humidity') ?? 0;
+
+    return view('pages.user.dashboard', compact('latestSensor', 'sensorHistory', 'sensorCount', 'avgTemp', 'avgHum'));
 });
 
-Route::get('/dashboard-detail/realtime-data', function () {
+Route::get('/dashboard-detail/realtime-data', function (Request $request) {
     if (!Session::get('login') || Session::get('role') !== 'user') {
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    $incubatorCode = strtoupper(trim((string) Session::get('incubator_code')));
-    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest('id')->first();
+    $incubatorCode = Session::get('incubator_code');
+    $latestSensor = SensorData::where('incubator_code', $incubatorCode)->latest()->first();
     
     if (!$latestSensor) {
         return response()->json(['has_data' => false]);
@@ -260,7 +344,7 @@ Route::get('/dashboard-detail/realtime-data', function () {
 
     // Latest 10 for chart (in chronological order)
     $chartData = SensorData::where('incubator_code', $incubatorCode)
-        ->latest('id')
+        ->latest()
         ->limit(10)
         ->get()
         ->reverse()
@@ -274,8 +358,10 @@ Route::get('/dashboard-detail/realtime-data', function () {
         });
 
     // Latest 10 for table
-    $tableData = SensorData::where('incubator_code', $incubatorCode)
-        ->latest('id')
+    $tableQuery = SensorData::where('incubator_code', $incubatorCode);
+    $tableQuery = applySensorFilters($tableQuery, $request);
+    
+    $tableData = $tableQuery->latest()
         ->limit(10)
         ->get()
         ->map(function ($item, $index) {
@@ -312,7 +398,7 @@ Route::get('/dashboard-detail/realtime-data', function () {
 
     // Latest logs (latest 4)
     $latestLogs = SensorData::where('incubator_code', $incubatorCode)
-        ->latest('id')
+        ->latest()
         ->limit(4)
         ->get()
         ->map(function ($log) {
@@ -387,7 +473,6 @@ Route::get('/dashboard-detail/realtime-data', function () {
     $tempDiff = (float)$latestSensor->temperature - 38.0;
     $humDiff = (float)$latestSensor->humidity - 60.0;
 
-    // Egg turning calculations
     $turningStatus = strtolower($latestSensor->turning_status);
     $isRotating = in_array($turningStatus, ['berputar', 'rotating'], true);
     $turnedAtFormatted = $latestSensor->turned_at 
@@ -406,6 +491,8 @@ Route::get('/dashboard-detail/realtime-data', function () {
         $progressPct = 100;
     }
     $nextTurnTime = $nextTurn ? $nextTurn->setTimezone('Asia/Jakarta')->format('H:i') : '--:--';
+
+    $filteredTotalCount = applySensorFilters(SensorData::where('incubator_code', $incubatorCode), $request)->count();
 
     return response()->json([
         'has_data' => true,
@@ -430,10 +517,96 @@ Route::get('/dashboard-detail/realtime-data', function () {
         'chart_data' => $chartData,
         'table_data' => $tableData,
         'latest_logs' => $latestLogs,
-        'total_count' => SensorData::where('incubator_code', $incubatorCode)->count()
+        'total_count' => $filteredTotalCount
         ])->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
           ->header('Pragma', 'no-cache')
           ->header('Expires', '0');
+});
+
+Route::get('/dashboard-detail/export/pdf', function (Request $request) {
+    if (!Session::get('login') || Session::get('role') !== 'user') {
+        return redirect('/login');
+    }
+
+    $incubatorCode = Session::get('incubator_code');
+    $query = SensorData::where('incubator_code', $incubatorCode);
+    $query = applySensorFilters($query, $request);
+
+    $sensorHistory = $query->latest()->limit(5000)->get();
+    
+    $filters = [
+        'date_filter' => $request->input('date_filter'),
+        'start_date' => $request->input('start_date'),
+        'end_date' => $request->input('end_date'),
+        'temp_filter' => $request->input('temp_filter'),
+        'min_temp' => $request->input('min_temp'),
+        'max_temp' => $request->input('max_temp'),
+        'hum_filter' => $request->input('hum_filter'),
+        'min_hum' => $request->input('min_hum'),
+        'max_hum' => $request->input('max_hum'),
+        'status_filter' => $request->input('status_filter'),
+    ];
+
+    return view('pages.user.print_report', compact('sensorHistory', 'incubatorCode', 'filters'));
+});
+
+Route::get('/dashboard-detail/export/excel', function (Request $request) {
+    if (!Session::get('login') || Session::get('role') !== 'user') {
+        return redirect('/login');
+    }
+
+    $incubatorCode = Session::get('incubator_code');
+    $query = SensorData::where('incubator_code', $incubatorCode);
+    $query = applySensorFilters($query, $request);
+
+    $sensorHistory = $query->latest()->limit(5000)->get();
+
+    $headers = [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => 'attachment; filename="riwayat_sensor_' . $incubatorCode . '_' . now()->setTimezone('Asia/Jakarta')->format('Ymd_His') . '.csv"',
+        'Pragma' => 'no-cache',
+        'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+        'Expires' => '0'
+    ];
+
+    $callback = function() use ($sensorHistory) {
+        $file = fopen('php://output', 'w');
+        // UTF-8 BOM for Excel
+        fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+        
+        fputcsv($file, ['No', 'Tanggal', 'Waktu', 'Suhu (°C)', 'Kelembapan (%)', 'Keterangan']);
+        
+        foreach ($sensorHistory as $index => $history) {
+            $temp = (float)$history->temperature;
+            $hum = (float)$history->humidity;
+            
+            if ($temp > 38.5) {
+                $statusText = 'Terlalu Panas';
+            } elseif ($temp < 37.0) {
+                $statusText = 'Kurang Panas';
+            } elseif ($hum > 65.0) {
+                $statusText = 'Terlalu Lembap';
+            } elseif ($hum < 50.0) {
+                $statusText = 'Kurang Lembap';
+            } else {
+                $statusText = 'Optimal';
+            }
+
+            $histTime = $history->created_at->setTimezone('Asia/Jakarta');
+            
+            fputcsv($file, [
+                $index + 1,
+                $histTime->format('Y-m-d'),
+                $histTime->format('H:i:s'),
+                number_format($temp, 2),
+                number_format($hum, 1),
+                $statusText
+            ]);
+        }
+        fclose($file);
+    };
+
+    return response()->stream($callback, 200, $headers);
 });
 
 /*
